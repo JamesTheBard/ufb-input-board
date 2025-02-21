@@ -92,7 +92,7 @@ The example creates the hex value needed to turn on outputs 1, 2, 3, 4, 5, 6, 7,
 ]
 ```
 
-Remember, there are 29 inputs available that can be reassigned, not just the first 17 "default" ones.
+Remember, there are 29 inputs available that can be reassigned, not just the first 18 "default" ones.
 
 ### Selecting a Profile
 
