@@ -1,6 +1,7 @@
 # UFB Input Board
 
 ![](images/input_board_and_display.jpeg)
+![](images/adapter_board.jpeg)
 
 ## Profiles
 
