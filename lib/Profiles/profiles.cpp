@@ -1,11 +1,4 @@
-#include "inputs.hpp"
-
-SPISettings inputSettings(SPI0_SCLK_SPEED, MSBFIRST, SPI_MODE2);
-SPISettings outputSettings(SPI0_SCLK_SPEED, MSBFIRST, SPI_MODE0);
-std::atomic<uint32_t> input_data;
-std::atomic<uint32_t> output_data;
-std::atomic<uint8_t> current_profile;
-
+#include "profiles.hpp"
 
 Profile::Profile(String pname, std::map<uint8_t, uint32_t> pmap) {
     profile_name = pname;
@@ -34,10 +27,6 @@ uint32_t Profile::processInputs(uint32_t data) {
         processed_data |= value * (data >> (key - 1) & 1);    
     }
     return processed_data;
-}
-
-uint32_t reverseBytes(uint32_t data) {
-    return ((data & 0xFF) << 24 | (data & 0xFF00) << 8 | (data & 0xFF0000) >> 8 | (data >> 24));
 }
 
 bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles) {

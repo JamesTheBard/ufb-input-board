@@ -3,64 +3,40 @@
 #include <Fonts/TomThumb.h>
 #include <ufbdisplay.hpp>
 #include <inputs.hpp>
+#include <atomic>
 
+#define UFB_POWER 25
+
+Inputs *inputs;
+uint32_t input_buffer, output_buffer;
+std::atomic<uint32_t> input_data, output_data;
+std::atomic<uint8_t> current_profile;
 
 void setup() {
-  pinMode(OUTPUT_CLR, OUTPUT);
-  digitalWrite(OUTPUT_CLR, HIGH);
-
-  profiles[1] = {"Passthrough (1:1)"}; // No buttons get remapped
-
-  current_profile.store(1);
-  input_data.store(0);
-  output_data.store(0);
-
   Serial.begin(9600);
 
+  // Get the data variables initialized
+  input_data.store(0);
+  output_data.store(0);
+  input_buffer = 0;
+  output_buffer = 0;
+
+  // Load the profiles from the SD card
+  profiles[1] = {"Passthrough (1:1)"}; // No buttons get remapped
+  current_profile.store(1);
   loadProfilesFromSDCard(profiles);
 
-  pinMode(25, OUTPUT);
-  digitalWrite(25, HIGH);
-
-  Serial.println("Starting SPI busses...");
-
-  SPI.setRX(SPI0_MISO);
-  SPI.setTX(SPI0_MOSI);
-  SPI.setSCK(SPI0_SCLK);
-  SPI.begin();
-
-  
-  pinMode(INPUT_LATCH, OUTPUT);
-  pinMode(INPUT_CE, OUTPUT);
-
-  pinMode(OUTPUT_CE, OUTPUT);
-  pinMode(OUTPUT_SS, OUTPUT);
-  pinMode(OUTPUT_CLR, OUTPUT);
-
-  digitalWrite(INPUT_LATCH, HIGH);
-  digitalWrite(INPUT_CE, HIGH);
-  digitalWrite(OUTPUT_CE, HIGH);
-  digitalWrite(OUTPUT_CLR, HIGH);
-
-  current_profile.store(1);
-
+  // Clear all of the outputs and boot the UFB
   Serial.println("Starting controller...");
+
+  inputs = new Inputs(&SPI);
+  inputs->writeOutputs(&output_buffer);
+  pinMode(UFB_POWER, OUTPUT);
+  digitalWrite(UFB_POWER, HIGH);
 }
 
-uint32_t input_buffer = 0;
-uint32_t output_buffer = 0;
-
 void loop(){
-  // Read all inputs (4 bytes)
-  SPI.beginTransaction(inputSettings);
-  digitalWrite(INPUT_CE, LOW);
-  digitalWrite(INPUT_LATCH, LOW);
-  digitalWrite(INPUT_LATCH, HIGH);
-
-  SPI.transfer(&input_buffer, 4);
-
-  digitalWrite(INPUT_CE, HIGH);
-  SPI.endTransaction();
+  inputs->readInputs(&input_buffer);
 
   // Short circuit processing if the inputs haven't changed
   if (input_buffer == input_data.load()) return;
@@ -92,15 +68,7 @@ void loop(){
   output_buffer = reverseBytes(output_data.load()) >> 8;
 
   // Write all outputs (3 bytes)
-  digitalWrite(OUTPUT_CE, LOW);
-  digitalWrite(OUTPUT_SS, LOW);
-
-  SPI.beginTransaction(outputSettings);
-  SPI.transfer(&output_buffer, 3);
-  SPI.endTransaction();
-  
-  digitalWrite(OUTPUT_SS, HIGH);
-  // digitalWrite(OUTPUT_CE, HIGH);
+  inputs->writeOutputs(&output_buffer);
 }
 
 void setup1() {
