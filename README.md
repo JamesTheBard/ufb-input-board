@@ -42,8 +42,8 @@ A user-defined profile will use what's called the mapping mode.  This does add a
 
 | Mode | Absolute Worst | Typical Worst | Minimum |
 |:-:|:-:|:-:|:-:|
-| `passthrough` | 63.6 usec | 47.1 usec | 31.8 usec |
-| `mapping` | 77.6 usec* | 54.1 usec* | 38.8 usec |
+| `passthrough` | 63.6 μsec | 47.1 μsec | 31.8 μsec |
+| `mapping` | 77.6 μsec* | 54.1 μsec* | 38.8 μsec |
 
 Notes:
 - **Absolute Worst** occurs when an input gets processed and after processing another input is read.  The window for this is 31.8 microseconds in passthrough mode and 38.8 microseconds in mapping mode and pretty difficult to trigger. In mapping mode, the **Absolute Worst** and **Typical Worst** can be exceeded if a ton of button mappings are defined, but still should remain under 100 and 85 microseconds respectively.
