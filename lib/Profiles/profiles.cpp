@@ -80,5 +80,3 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles) {
     SPI1.end();
     return true;
 }
-
-std::map<uint8_t, Profile> profiles;

@@ -3,13 +3,12 @@
 SPISettings inputSettings(SPI0_SCLK_READ, MSBFIRST, SPI_MODE2);
 SPISettings outputSettings(SPI0_SCLK_WRITE, MSBFIRST, SPI_MODE0);
 
-Inputs::Inputs(SPIClassRP2040 *spi) {
-    SPIClassRP2040 *inputsSPI = spi;
-    inputsSPI->setRX(SPI0_MISO);
-    inputsSPI->setRX(SPI0_MISO);
-    inputsSPI->setTX(SPI0_MOSI);
-    inputsSPI->setSCK(SPI0_SCLK);
-    inputsSPI->begin();
+Inputs::Inputs() {
+    SPI.setRX(SPI0_MISO);
+    SPI.setRX(SPI0_MISO);
+    SPI.setTX(SPI0_MOSI);
+    SPI.setSCK(SPI0_SCLK);
+    SPI.begin();
 
     initializePins();    
 }
@@ -29,28 +28,29 @@ void Inputs::initializePins() {
 }
 
 void Inputs::readInputs(uint32_t *buffer) {
-    inputsSPI->beginTransaction(inputSettings);
+    SPI.beginTransaction(inputSettings);
 
     digitalWrite(INPUT_CE, LOW);
     digitalWrite(INPUT_LATCH, LOW);
     digitalWrite(INPUT_LATCH, HIGH);
     
-    inputsSPI->transfer(buffer, 4);
+    SPI.transfer(buffer, 4);
     
     digitalWrite(INPUT_CE, HIGH);
     
-    inputsSPI->endTransaction();
+    SPI.endTransaction();
 }
 
 void Inputs::writeOutputs(uint32_t *buffer) {
     digitalWrite(OUTPUT_CE, LOW);
     digitalWrite(OUTPUT_SS, LOW);
 
-    inputsSPI->beginTransaction(outputSettings);
-    inputsSPI->transfer(buffer, 3);
-    inputsSPI->endTransaction();
+    SPI.beginTransaction(outputSettings);
+    SPI.transfer(buffer, 3);
+    SPI.endTransaction();
 
     digitalWrite(OUTPUT_SS, HIGH);
+    // digitalWrite(OUTPUT_CE, HIGH);
 }
 
 uint32_t reverseBytes(uint32_t data) {

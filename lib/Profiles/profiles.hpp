@@ -33,6 +33,4 @@ public:
 
 bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles);
 
-extern std::map<uint8_t, Profile> profiles;
-
 #endif // _PROFILES_HPP

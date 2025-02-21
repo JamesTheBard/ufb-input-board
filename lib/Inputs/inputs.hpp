@@ -24,7 +24,7 @@ class Inputs {
     SPIClassRP2040 *inputsSPI;
 
 public:
-    Inputs(SPIClassRP2040 *spi);
+    Inputs();
 
     void readInputs(uint32_t *buffer);
     void writeOutputs(uint32_t *buffer);
