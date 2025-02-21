@@ -2,7 +2,6 @@
 
 Adafruit_SSD1306 display(DISP_WIDTH, DISP_HEIGHT, &Wire, -1);
 uint8_t input_width = 8;
-char title[32] = "Passthrough (1:1)";
 
 void drawSquare(uint8_t x, uint8_t y, bool enabled) {
     uint8_t w = 6;
@@ -13,8 +12,7 @@ void drawSquare(uint8_t x, uint8_t y, bool enabled) {
     }
 }
 
-void drawCircle(uint8_t x, uint8_t y, bool enabled) {
-    uint8_t radius = 4;
+void drawCircle(uint8_t x, uint8_t y, bool enabled, uint8_t radius) {
     if (enabled) {
         display.fillCircle(x, y, radius, SSD1306_WHITE);
     } else {
@@ -22,10 +20,13 @@ void drawCircle(uint8_t x, uint8_t y, bool enabled) {
     }
 }
 
+void drawCircle(uint8_t x, uint8_t y, bool enabled) {
+    drawCircle(x, y, enabled, 4);
+}
+
 bool readInput(uint32_t data, uint8_t input) {
-    if (input == 0) return false;
-    input -= 1;
-    return (data >> input) & 1;
+    if (!input) return false;
+    return (data >> --input) & 1;
 }
 
 void drawOutputs(uint8_t line, uint32_t data) {
@@ -48,25 +49,30 @@ void drawOutputs(uint8_t line, uint32_t data) {
     drawCircle(5 * ch + 1, line + chh + ch, readInput(data, 2)); // 3K - R2
     drawCircle(6 * ch + 1, line + chh + ch, readInput(data, 1)); // 4K - L2
 
-    drawSquare(7 * ch + chh, line + 2, readInput(data, 11));             // Select
-    drawSquare(7 * ch + chh + sh, line + 2, readInput(data, 9));         // Start
-    drawSquare(7 * ch + chh + (2 * sh), line + 2, readInput(data,  10)); // Home
+    drawSquare(7 * ch + chh, line + 2, readInput(data, 11));            // Select
+    drawSquare(7 * ch + chh + sh, line + 2, readInput(data, 9));        // Start
+    drawSquare(7 * ch + chh + (2 * sh), line + 2, readInput(data, 10)); // Home
 
     drawCircle(8 * ch - 1, line + chh + ch, readInput(data, 16)); // L3
     drawCircle(9 * ch, line + chh + ch, readInput(data, 17));     // R3
+
+    if (readInput(data, 18)) {
+        display.setCursor(10 * ch + 9, line + 7);
+        display.print("TPK");
+    }
 }
 
 void drawInputs(int8_t line, uint32_t data) {
-    for (int i = 0; i < 16; i ++) {
+    for (int i = 0; i < 16; i++) {
         if (data >> i & 1) {
-        display.fillRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.fillRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
         } else {
-        display.drawRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.drawRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
         }
         if (data >> (i + 16) & 1) {
-        display.fillRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.fillRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
         } else {
-        display.drawRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.drawRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
         }
     }
 }
@@ -75,6 +81,10 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     display.setCursor(0, 6);
     display.clearDisplay();
     display.println(F("Current inputs"));
+    if (input_data >> 29 && 1) {
+        display.setCursor(96, 6);
+        display.print("Unlocked");
+    }
     drawInputs(8, input_data);
     display.fillRoundRect(0, 31, 7, 7, 1, SSD1306_WHITE);
     display.setCursor(2, 37);

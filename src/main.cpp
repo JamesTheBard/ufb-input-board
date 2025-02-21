@@ -6,7 +6,8 @@
 #include <atomic>
 #include <map>
 
-#define UFB_POWER 25
+#define UFB_ENABLE 22
+#define BOOT_LED 25
 
 Inputs *inputs;
 std::map<uint8_t, Profile> profiles;
@@ -19,7 +20,13 @@ uint8_t profile_state;
 void setup() {
     Serial.begin(9600);
 
-    pinMode(UFB_POWER, OUTPUT);
+    // Ensure that the UFB is off via the UFB_ENABLE pin that controls
+    // V_BUS going into the Brook UFB.
+    pinMode(UFB_ENABLE, OUTPUT);
+    digitalWrite(UFB_ENABLE, LOW);
+
+    pinMode(BOOT_LED, OUTPUT);
+    digitalWrite(BOOT_LED, LOW);
 
     // Get the data variables initialized
     input_data.store(0);
@@ -36,7 +43,6 @@ void setup() {
 
     // Start reading inputs.  This needs to happen prior to the UFB coming online so
     // that we can keep the mode selection capabilities of the UFB on boot.
-    digitalWrite(UFB_POWER, LOW);
     Serial.println("Starting Brook UFB controller...");
 
     inputs = new Inputs();
@@ -46,7 +52,8 @@ void setup() {
     output_buffer = reverseBytes(output_data.load()) >> 8;
     inputs->writeOutputs(&output_buffer);
 
-    digitalWrite(UFB_POWER, HIGH);
+    digitalWrite(UFB_ENABLE, HIGH);
+    digitalWrite(BOOT_LED, HIGH);
 }
 
 void loop() {
@@ -60,7 +67,7 @@ void loop() {
     // is actually enabled.
     profile_state = input_buffer >> 29;
     if (profile_state & 0b001) {
-        if (profile_state & 0b011) {
+        if (profile_state == 0b011) {
             uint8_t prev_profile = current_profile.load() - 1;
             if (prev_profile < 1) return;
             if (profiles.count(prev_profile) > 0) {
@@ -68,7 +75,7 @@ void loop() {
             }
         }
 
-        if (profile_state & 0b101) {
+        if (profile_state == 0b101) {
             uint8_t next_profile = current_profile.load() + 1;
             if (profiles.count(next_profile) > 0) {
                 current_profile.store(next_profile);
