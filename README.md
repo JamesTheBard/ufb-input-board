@@ -42,12 +42,12 @@ A user-defined profile will use what's called the mapping mode.  This does add a
 
 | Mode | Absolute Worst | Typical Worst | Minimum |
 |:-:|:-:|:-:|:-:|
-| `passthrough` | 67.2 usec | 49.2 usec | 33.6 usec |
-| `mapping` | 79.2 usec* | 55.2 usec* | 39.6 usec |
+| `passthrough` | 63.6 usec | 47.1 usec | 31.8 usec |
+| `mapping` | 77.6 usec* | 54.1 usec* | 38.8 usec |
 
 Notes:
-- **Absolute Worst** occurs when an input gets processed and after processing another input is read.  The window for this is 33.6 microseconds in passthrough mode and 39.2 microseconds in mapping mode and pretty difficult to trigger. In mapping mode, the **Absolute Worst** and **Typical Worst** can be exceeded if a ton of button mappings are defined, but still should remain under 100 and 85 microseconds respectively.
-- **Typical Worst** occurs outside of the specific case mentioned in **Absolute Worst**.  The controller polls inputs as quickly as possible, and if there are no changes in the inputs from the previous poll it skips all processing and polls again.  The interval on this is 15.6 microseconds.
+- **Absolute Worst** occurs when an input gets processed and after processing another input is read.  The window for this is 31.8 microseconds in passthrough mode and 38.8 microseconds in mapping mode and pretty difficult to trigger. In mapping mode, the **Absolute Worst** and **Typical Worst** can be exceeded if a ton of button mappings are defined, but still should remain under 100 and 85 microseconds respectively.
+- **Typical Worst** occurs outside of the specific case mentioned in **Absolute Worst**.  The controller polls inputs as quickly as possible, and if there are no changes in the inputs from the previous poll it skips all processing and polls again.  The interval on this is 15.3 microseconds.
 - **Minimum** is the processing interval for each mode to include reading the inputs from the four `74HC165`s and writing the outputs to the three `74HC595`s.
 - The stated lag does not include any lag associated with the Brook Universal Fighting Board.
 
