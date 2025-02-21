@@ -1,8 +1,13 @@
-# Introduction
+# UFB Input Board
+
+![](images/input_board_and_display.jpeg)
+![](images/adapter_board.jpeg)
+
+## Profiles
 
 To configure profiles, create the `profiles.json` file in the root of the SD card.
 
-# Structure
+### File Structure
 
 ```json
 {
@@ -25,7 +30,7 @@ To configure profiles, create the `profiles.json` file in the root of the SD car
 }
 ```
 
-## Profiles
+### Breakdown
 
 Profiles control how the 29 inputs are mapped to the 17 outputs.  The default profile is always `Passthrough (1:1)` which is associated with profile 1.  Any profiles defined in the `profiles.json` file will show up in slot 2 and above in the order they appear in the `profiles.json` file.
 
@@ -46,11 +51,11 @@ Notes:
 - **Minimum** is the processing interval for each mode to include reading the inputs from the four `74HC165`s and writing the outputs to the three `74HC595`s.
 - The stated lag does not include any lag associated with the Brook Universal Fighting Board.
 
-## Name
+### Name
 
 The `name` field is what the display will show when you select the profile.  It's just a string that contains the name of the profile.  If you _don't_ set this, then you'll see the default name of _Unnamed Profile_.
 
-## Mappings
+### Mappings
 
 The `mappings` is pretty straightforward.  The first value is the input number on the input board.  There are 29 available inputs, and the first 17 have defaults associated with them.  However, those are just suggestions and really only apply to passthrough mode (Profile 1).  You can map and input to any number of outputs (including none).
 
@@ -87,9 +92,9 @@ The example creates the hex value needed to turn on outputs 1, 2, 3, 4, 5, 6, 7,
 ]
 ```
 
-Remember, there are 29 inputs available that can be reassigned, not just the first 17 "default" ones.
+Remember, there are 29 inputs available that can be reassigned, not just the first 18 "default" ones.
 
-## Selecting a Profile
+### Selecting a Profile
 
 Inputs 31 and 32 need to be connected to buttons/momentary switches.  Input 30 should be connected to a latching switch.  When it's on then the profile is locked and cannot be changed via the other buttons.
 
@@ -99,7 +104,7 @@ Inputs 31 and 32 need to be connected to buttons/momentary switches.  Input 30 s
 | `31` | Activates the previous profile. |
 | `32` | Activates the next profile.
 
-# Inputs and Outputs
+## Inputs and Outputs
 
 | Input/Output | PS | XBox | Switch | Fightin' |
 |:--:|:--:|:--:|:--:|:--:|
@@ -120,5 +125,6 @@ Inputs 31 and 32 need to be connected to buttons/momentary switches.  Input 30 s
 | `15` | Up | Up | Up | Up |
 | `16` | L3 | LTSB | LTSB | L3 |
 | `17` | R3 | RTSB | RTSB | R3 |
+| `18` | TP Key | -- | -- | -- |
 
-For inputs, there are 12 undefined inputs: `18` through `29`.  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.
+For inputs, there are 11 undefined inputs: `19` through `29`.  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.
