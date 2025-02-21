@@ -56,6 +56,8 @@ void loop() {
     // Short circuit processing if the inputs haven't changed
     if (input_buffer == input_data.load()) return;
 
+    // Only process profile inputs if Profile Enable (input 30) input
+    // is actually enabled.
     profile_state = input_buffer >> 29;
     if (profile_state & 0b001) {
         if (profile_state & 0b101) {
