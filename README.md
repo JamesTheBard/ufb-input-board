@@ -120,5 +120,6 @@ Inputs 31 and 32 need to be connected to buttons/momentary switches.  Input 30 s
 | `15` | Up | Up | Up | Up |
 | `16` | L3 | LTSB | LTSB | L3 |
 | `17` | R3 | RTSB | RTSB | R3 |
+| `18` | TP Key | -- | -- | -- |
 
-For inputs, there are 12 undefined inputs: `18` through `29`.  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.
+For inputs, there are 12 undefined inputs: `19` through `29`.  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.

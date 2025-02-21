@@ -14,6 +14,7 @@ std::atomic<uint8_t> current_profile;
 
 void setup() {
     Serial.begin(9600);
+    pinMode(UFB_POWER, OUTPUT);
 
     // Get the data variables initialized
     input_data.store(0);
@@ -22,13 +23,14 @@ void setup() {
     output_buffer = 0;
 
     // Load the profiles from the SD card
+    Serial.println("Loading profiles from the SD card...");
     profiles[1] = {"Passthrough (1:1)"}; // No buttons get remapped
     current_profile.store(1);
     loadProfilesFromSDCard(profiles);
 
     // Start reading inputs.  This needs to happen prior to the UFB coming online so
     // that we can keep the mode selection capabilities of the UFB on boot.
-    Serial.println("Starting controller...");
+    Serial.println("Starting Brook UFB controller...");
 
     inputs = new Inputs(&SPI);
     inputs->readInputs(&input_buffer);
@@ -37,11 +39,10 @@ void setup() {
     output_buffer = reverseBytes(output_data.load()) >> 8;
     inputs->writeOutputs(&output_buffer);
 
-    pinMode(UFB_POWER, OUTPUT);
     digitalWrite(UFB_POWER, HIGH);
 }
 
-void loop(){
+void loop() {
     inputs->readInputs(&input_buffer);
 
     // Short circuit processing if the inputs haven't changed
