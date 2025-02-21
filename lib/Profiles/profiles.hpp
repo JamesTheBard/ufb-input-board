@@ -16,6 +16,8 @@
 #define OUTPUT_TOTAL 18
 
 class Profile {
+    bool is_passthrough = true;
+    uint32_t mask;
 
 public:
     Profile(): profile_map() {}
@@ -27,11 +29,6 @@ public:
 
     uint32_t processInputs(uint32_t data);
     void generateMask();
-
-private:
-    bool is_passthrough = true;
-    uint32_t mask;
-
 };
 
 bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles);
