@@ -68,24 +68,26 @@ void loop() {
     // Only process profile inputs if Profile Enable (input 30) input
     // is actually enabled.
     profile_state = input_buffer >> 29;
-    if (profile_state & 0b001 && millis() > prof_debounce) {
-        if (profile_state == 0b011) {
-            uint8_t prev_profile = current_profile.load() - 1;
-            if (prev_profile < 1) return;
-            if (profiles.count(prev_profile) > 0) {
-                current_profile.store(prev_profile);
+    if (profile_state & 0b001) {
+        if (millis() > prof_debounce) { 
+            if (profile_state == 0b011) {
+                uint8_t prev_profile = current_profile.load() - 1;
+                if (prev_profile < 1) return;
+                if (profiles.count(prev_profile) > 0) {
+                    current_profile.store(prev_profile);
+                }
             }
-        }
 
-        if (profile_state == 0b101) {
-            uint8_t next_profile = current_profile.load() + 1;
-            if (profiles.count(next_profile) > 0) {
-                current_profile.store(next_profile);
+            if (profile_state == 0b101) {
+                uint8_t next_profile = current_profile.load() + 1;
+                if (profiles.count(next_profile) > 0) {
+                    current_profile.store(next_profile);
+                }
             }
-        }
 
-        if (profile_state >> 1) {
-            prof_debounce = millis() + 200;
+            if (profile_state >> 1) {
+                prof_debounce = millis() + 200;
+            }
         }
     }
 
