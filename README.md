@@ -57,7 +57,7 @@ The `name` field is what the display will show when you select the profile.  It'
 
 ### Mappings
 
-The `mappings` is pretty straightforward.  The first value is the input number on the input board.  There are 29 available inputs, and the first 17 have defaults associated with them.  However, those are just suggestions and really only apply to passthrough mode (Profile 1).  You can map and input to any number of outputs (including none).
+The `mappings` is pretty straightforward.  The first value is the input number on the input board.  There are 29 available inputs, and the first 18 have defaults associated with them.  However, those are just suggestions and really only apply to passthrough mode (Profile 1).  You can map and input to any number of outputs (including none).
 
 The second value is a hexidecimal representation of the outputs that will be activated when you press the input.  The first bit is output 1, second bit is output 2 and so on.  For example, in the `Cool Profile 2` profile, the first mapping shows input `12` being mapped to `00003`.
 

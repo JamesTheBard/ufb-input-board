@@ -78,6 +78,7 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles) {
             }
             if (String(kv.key().c_str()) == "mappings") {
                 for (JsonArray marray : kv.value().as<JsonArray>()) {
+                    if (marray[0].as<uint8_t>() >= 30) continue; // ignore profile button remaps (inputs 30-32)
                     const char *v = marray[1];
                     profiles[pcount].profile_map[marray[0].as<uint8_t>()] = std::stoul(v, nullptr, 16);
                 }
