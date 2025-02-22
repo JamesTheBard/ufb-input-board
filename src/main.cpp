@@ -4,10 +4,13 @@
 #include <ufbdisplay.hpp>
 #include <inputs.hpp>
 
+#define UFB_ENABLE 22
+#define BOOT_LED 25
 
 void setup() {
-    pinMode(OUTPUT_CLR, OUTPUT);
-    digitalWrite(OUTPUT_CLR, HIGH);
+    pinMode(UFB_ENABLE, OUTPUT);
+    pinMode(BOOT_LED, OUTPUT);
+    digitalWrite(UFB_ENABLE, LOW);
 
     profiles[1] = {"Passthrough (1:1)"}; // No buttons get remapped
 
@@ -18,9 +21,6 @@ void setup() {
     Serial.begin(9600);
 
     loadProfilesFromSDCard(profiles);
-
-    pinMode(25, OUTPUT);
-    digitalWrite(25, HIGH);
 
     Serial.println("Starting SPI busses...");
 
@@ -45,6 +45,32 @@ void setup() {
     current_profile.store(1);
 
     Serial.println("Starting controller...");
+
+    SPI.beginTransaction(inputSettings);
+    digitalWrite(INPUT_CE, LOW);
+    digitalWrite(INPUT_LATCH, LOW);
+    digitalWrite(INPUT_LATCH, HIGH);
+
+    SPI.transfer(&input_buffer, 4);
+
+    digitalWrite(INPUT_CE, HIGH);
+    SPI.endTransaction();
+
+    input_data.store(input_buffer);
+    output_data.store(profiles[current_profile.load()].processInputs(input_buffer));
+    output_buffer = reverseBytes(output_data.load()) >> 8;
+
+    // Write all outputs (3 bytes)
+    digitalWrite(OUTPUT_CE, LOW);
+    digitalWrite(OUTPUT_SS, LOW);
+
+    SPI.beginTransaction(outputSettings);
+    SPI.transfer(&output_buffer, 3);
+    SPI.endTransaction();
+    
+    digitalWrite(OUTPUT_SS, HIGH);
+    digitalWrite(UFB_ENABLE, HIGH);
+    digitalWrite(BOOT_LED, HIGH);
 }
 
 uint32_t input_buffer = 0;
@@ -69,18 +95,17 @@ void loop(){
     // Switch profiles based on 31/32
     if (input_buffer & (1 << 29) && millis() > profile_debounce) {
         if (input_buffer & (1 << 30)) {
-        int8_t prev_profile = current_profile.load() - 1;
-        if (prev_profile < 1) return;
-        if (profiles.count(prev_profile) > 0) {
-            current_profile.store(prev_profile);
-        }
+            int8_t prev_profile = current_profile.load() - 1;
+            if (prev_profile >= 1 && profiles.count(prev_profile) > 0) {
+                current_profile.store(prev_profile);
+            }
         }
 
         if (input_buffer & (1 << 31)) {
-        uint8_t next_profile = current_profile.load() + 1;
-        if (profiles.count(next_profile) > 0) {
-            current_profile.store(next_profile);
-        }
+            uint8_t next_profile = current_profile.load() + 1;
+            if (profiles.count(next_profile) > 0) {
+                current_profile.store(next_profile);
+            }
         }
         
         if (input_buffer & (3 << 30)) profile_debounce = millis() + 200;
