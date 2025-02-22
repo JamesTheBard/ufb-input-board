@@ -1,12 +1,11 @@
-#ifndef INPUTS_H
-#define INPUTS_H
+#ifndef _INPUTS_HPP
+#define _INPUTS_HPP
 
 #include <SPI.h>
 #include <atomic>
 #include <map>
 #include <SD.h>
 #include <ArduinoJson.h>
-// #include <stdio.h>
 
 #define SPI0_MISO  0
 #define SPI0_SCLK  2
@@ -56,4 +55,4 @@ extern std::atomic<uint32_t> output_data;
 extern std::atomic<uint8_t> current_profile;
 extern std::map<uint8_t, Profile> profiles;
 
-#endif // INPUTS_H
+#endif // _INPUTS_HPP

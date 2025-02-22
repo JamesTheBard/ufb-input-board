@@ -1,11 +1,10 @@
-#ifndef UFBDISPLAY_H
-#define UFBDISPLAY_H
+#ifndef _UFBDISPLAY_HPP
+#define _UFBDISPLAY_HPP
 
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <string>
 
 #define I2C0_SDA 4
 #define I2C0_SCL 5
@@ -25,4 +24,4 @@ void drawOutputs(uint8_t line, uint32_t data);
 void drawInputs(int8_t line, uint32_t data);
 void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num);
 
-#endif // UFBDISPLAY_H
+#endif // _UFBDISPLAY_HPP
