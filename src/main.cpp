@@ -7,6 +7,9 @@
 #define UFB_ENABLE 22
 #define BOOT_LED 25
 
+uint32_t input_buffer, output_buffer;
+uint32_t profile_debounce = 0;
+
 void setup() {
     pinMode(UFB_ENABLE, OUTPUT);
     pinMode(BOOT_LED, OUTPUT);
@@ -73,9 +76,6 @@ void setup() {
     digitalWrite(BOOT_LED, HIGH);
 }
 
-uint32_t input_buffer = 0;
-uint32_t output_buffer = 0;
-uint32_t profile_debounce = 0;
 
 void loop(){
     // Read all inputs (4 bytes)
@@ -96,14 +96,14 @@ void loop(){
     if (input_buffer & (1 << 29) && millis() > profile_debounce) {
         if (input_buffer & (1 << 30)) {
             int8_t prev_profile = current_profile.load() - 1;
-            if (prev_profile >= 1 && profiles.count(prev_profile) > 0) {
+            if (prev_profile && profiles.count(prev_profile)) {
                 current_profile.store(prev_profile);
             }
         }
 
         if (input_buffer & (1 << 31)) {
             uint8_t next_profile = current_profile.load() + 1;
-            if (profiles.count(next_profile) > 0) {
+            if (profiles.count(next_profile)) {
                 current_profile.store(next_profile);
             }
         }
