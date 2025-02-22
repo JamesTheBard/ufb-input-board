@@ -11,7 +11,8 @@
 #define SPI0_MISO  0
 #define SPI0_SCLK  2
 #define SPI0_MOSI  3
-#define SPI0_SCLK_SPEED 10000000
+#define SPI0_SCLK_SPEED_INPUTS  10000000
+#define SPI0_SCLK_SPEED_OUTPUTS 10000000
 
 #define INPUT_CE    21
 #define INPUT_LATCH 20
@@ -20,7 +21,7 @@
 #define OUTPUT_SS  6
 #define OUTPUT_CLR 7
 
-#define OUTPUT_TOTAL 17
+#define OUTPUT_TOTAL 18
 
 #define SPI1_MISO  8
 #define SPI1_SCLK 10

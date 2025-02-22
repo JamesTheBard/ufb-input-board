@@ -1,7 +1,7 @@
 #include "inputs.hpp"
 
-SPISettings inputSettings(SPI0_SCLK_SPEED, MSBFIRST, SPI_MODE2);
-SPISettings outputSettings(SPI0_SCLK_SPEED, MSBFIRST, SPI_MODE0);
+SPISettings inputSettings(SPI0_SCLK_SPEED_INPUTS, MSBFIRST, SPI_MODE2);
+SPISettings outputSettings(SPI0_SCLK_SPEED_OUTPUTS, MSBFIRST, SPI_MODE0);
 std::atomic<uint32_t> input_data;
 std::atomic<uint32_t> output_data;
 std::atomic<uint8_t> current_profile;
