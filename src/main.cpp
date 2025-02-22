@@ -94,7 +94,7 @@ void loop(){
     // Switch profiles based on 31/32
     if (input_buffer & (1 << 29) && millis() > profile_debounce) {
         if (input_buffer & (1 << 30)) {
-            int8_t prev_profile = current_profile.load() - 1;
+            uint8_t prev_profile = current_profile.load() - 1;
             if (prev_profile && profiles.count(prev_profile)) {
                 current_profile.store(prev_profile);
             }
