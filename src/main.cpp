@@ -76,7 +76,6 @@ void setup() {
     digitalWrite(BOOT_LED, HIGH);
 }
 
-
 void loop(){
     // Read all inputs (4 bytes)
     SPI.beginTransaction(inputSettings);
@@ -141,5 +140,5 @@ void setup1() {
 }
 
 void loop1() {
-    drawScreen(input_data.load(), output_data.load(), profiles[current_profile.load()].profile_name, current_profile);
+    drawScreen(input_data.load(), output_data.load(), profiles[current_profile.load()].profile_name, current_profile.load());
 }
