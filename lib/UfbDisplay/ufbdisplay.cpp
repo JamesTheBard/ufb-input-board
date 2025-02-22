@@ -63,14 +63,14 @@ void drawOutputs(uint8_t line, uint32_t data) {
 void drawInputs(int8_t line, uint32_t data) {
     for (int i = 0; i < 16; i ++) {
         if (data >> i & 1) {
-        display.fillRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.fillRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
         } else {
-        display.drawRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.drawRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
         }
         if (data >> (i + 16) & 1) {
-        display.fillRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.fillRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
         } else {
-        display.drawRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
+            display.drawRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
         }
     }
 }
