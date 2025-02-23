@@ -14,8 +14,6 @@
 #define DISP_HEIGHT  64
 
 extern Adafruit_SSD1306 display;
-extern uint8_t input_width;
-extern char title[32];
 
 void drawSquare(uint8_t x, uint8_t y, bool enabled);
 void drawCircle(uint8_t x, uint8_t y, bool enabled);

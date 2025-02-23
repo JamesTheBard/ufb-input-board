@@ -2,7 +2,6 @@
 
 Adafruit_SSD1306 display(DISP_WIDTH, DISP_HEIGHT, &Wire, -1);
 uint8_t input_width = 8;
-char title[32] = "Passthrough (1:1)";
 
 /**
  * Draws a square on the attached display that's associated with an 
