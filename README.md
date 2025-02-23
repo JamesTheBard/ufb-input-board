@@ -3,6 +3,16 @@
 ![](images/input_board_and_display.jpeg)
 ![](images/adapter_board.jpeg)
 
+## What the Hell is This Project?
+
+This project is pretty simple: take a Brook UFB and add support for a display and input remapping for various definitions of cheap.  Also, keep the additional lag introduced to below 100 microseconds for all modes.[^1]
+
+The input board has 32 inputs of which 29 can be remapped to one or more outputs and supports the Brook cable harness to make things that much easier.  All of the inputs are labeled as well which should make hooking things up pretty easy.
+
+The adapter board is responsible for pushing the UFB's buttons, and each output has an LED associated with it to assist with troubleshooting.  Even better, there's a USB-C connector on the adapter board that replaces the Type-B on the UFB.[^2]
+
+The final bit is SD card support.  Profiles are loaded on the microSD card on the input board.
+
 ## Profiles
 
 To configure profiles, create the `profiles.json` file in the root of the SD card.
@@ -130,3 +140,9 @@ When input 30 (`PE`) is pressed, the display will show **Unlocked** at the top-r
 | `18` | TP Key | -- | -- | -- |
 
 For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`).  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.  Inputs 30, 31, and 32 are reserved for profile selection and cannot be remapped.
+
+## Footnotes
+
+[^1]: This board is full of "old-school" components.  The shift registers on the input board (`SN74HC165`) started manufacture in 1982 as well as the ones on the adapter board (`SN74HC165`).
+
+[^2]: You _have_ to use the Type-C connector.  This feeds the +5V to all of the boards and more importantly doesn't go directly to the Brook UFB...which means we can delay the Brook UFB's boot sequence until after everything is ready to go on the input and adapter boards.
