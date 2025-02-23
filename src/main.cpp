@@ -27,6 +27,7 @@ void setup() {
 
     Serial.println("Starting SPI busses...");
 
+    // Configure the SPI0 bus for reading/writing data
     SPI.setRX(SPI0_MISO);
     SPI.setTX(SPI0_MOSI);
     SPI.setSCK(SPI0_SCLK);
@@ -49,6 +50,7 @@ void setup() {
 
     Serial.println("Starting controller...");
 
+    // Do an initial read of the inputs...
     SPI.beginTransaction(inputSettings);
     digitalWrite(INPUT_CE, LOW);
     digitalWrite(INPUT_LATCH, LOW);
@@ -59,6 +61,7 @@ void setup() {
     digitalWrite(INPUT_CE, HIGH);
     SPI.endTransaction();
 
+    // Process the inputs
     input_data.store(input_buffer);
     output_data.store(profiles[current_profile.load()].processInputs(input_buffer));
     output_buffer = reverseBytes(output_data.load()) >> 8;
@@ -72,6 +75,9 @@ void setup() {
     SPI.endTransaction();
     
     digitalWrite(OUTPUT_SS, HIGH);
+
+    // Enable the power rail on the UFB.  Need to delay this after the
+    // outputs have been set on the adapter board.
     digitalWrite(UFB_ENABLE, HIGH);
     digitalWrite(BOOT_LED, HIGH);
 }
@@ -124,7 +130,6 @@ void loop(){
     SPI.endTransaction();
     
     digitalWrite(OUTPUT_SS, HIGH);
-    // digitalWrite(OUTPUT_CE, HIGH);
 }
 
 void setup1() {
@@ -136,7 +141,7 @@ void setup1() {
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
     display.display();
-    delay(2000);
+    delay(1000);
 }
 
 void loop1() {

@@ -13,6 +13,9 @@ Profile::Profile(String pname, std::map<uint8_t, uint32_t> pmap) {
     generateMask();
 }
 
+/**
+ * Generate the default mask for the profile.
+ */
 void Profile::generateMask() {
     if (profile_map.empty()) {
         is_passthrough = true;
@@ -26,6 +29,12 @@ void Profile::generateMask() {
     is_passthrough = false;
 };
 
+/**
+ * Process all of the inputs with the associated masks.
+ * 
+ * @param data the input data
+ * @return the processed output data
+ */
 uint32_t Profile::processInputs(uint32_t data) {
     if (is_passthrough) { return data; };
 
@@ -36,10 +45,22 @@ uint32_t Profile::processInputs(uint32_t data) {
     return processed_data;
 }
 
+/**
+ * Reverses the bytes of the given data.
+ * 
+ * @param data the data to reverse
+ * @return the reversed data
+ */
 uint32_t reverseBytes(uint32_t data) {
     return ((data & 0xFF) << 24 | (data & 0xFF00) << 8 | (data & 0xFF0000) >> 8 | (data >> 24));
 }
 
+/**
+ * Loads the profile configuration from the SD card.
+ * 
+ * @param profiles the profile map to load the profiles into
+ * @return whether reading the profiles was successful
+ */
 bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles) {
     SPI1.setRX(SPI1_MISO);
     SPI1.setTX(SPI1_MOSI);

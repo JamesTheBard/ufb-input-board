@@ -4,6 +4,14 @@ Adafruit_SSD1306 display(DISP_WIDTH, DISP_HEIGHT, &Wire, -1);
 uint8_t input_width = 8;
 char title[32] = "Passthrough (1:1)";
 
+/**
+ * Draws a square on the attached display that's associated with an 
+ * input.
+ * 
+ * @param x the X position of the top-left corner
+ * @param y the Y position of the top-left corner
+ * @param enabled whether the associated input is enabled
+ */
 void drawSquare(uint8_t x, uint8_t y, bool enabled) {
     uint8_t w = 6;
     if (enabled) {
@@ -13,6 +21,14 @@ void drawSquare(uint8_t x, uint8_t y, bool enabled) {
     }
 }
 
+/**
+ * Draws a circle on the attached display that is associated with an
+ * input.
+ * 
+ * @param x the X position of the center of the circle
+ * @param y the Y position of the center of the circle
+ * @param enabled whether the associated input is enabled
+ */
 void drawCircle(uint8_t x, uint8_t y, bool enabled) {
     uint8_t radius = 4;
     if (enabled) {
@@ -22,11 +38,24 @@ void drawCircle(uint8_t x, uint8_t y, bool enabled) {
     }
 }
 
+/**
+ * Given data, determine if a given input is enabled or not.
+ * 
+ * @param data the input data
+ * @param input the input to check
+ * @returns the current state of the input
+ */
 bool readInput(uint32_t data, uint8_t input) {
     if (input == 0) return false;
     return (data >> --input) & 1;
 }
 
+/**
+ * Draw the outputs to the screen.
+ * 
+ * @param line the line on the display to start drawing the inputs
+ * @param data the output data
+ */
 void drawOutputs(uint8_t line, uint32_t data) {
     uint8_t sh = 7;
     uint8_t ch = 10;
@@ -60,6 +89,12 @@ void drawOutputs(uint8_t line, uint32_t data) {
     }
 }
 
+/**
+ * Draw the inputs to the screen.
+ * 
+ * @param line the line to start drawing the inputs on
+ * @param data the input data
+ */
 void drawInputs(int8_t line, uint32_t data) {
     for (int i = 0; i < 16; i ++) {
         if (data >> i & 1) {
@@ -75,6 +110,14 @@ void drawInputs(int8_t line, uint32_t data) {
     }
 }
 
+/**
+ * Draw the screen with all of the inputs and outputs.
+ * 
+ * @param input_data the input data
+ * @param output_data the output data
+ * @param profile the name of the profile in use
+ * @param profile_num the number of the profile in use
+ */
 void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num) {
     display.setCursor(0, 6);
     display.clearDisplay();
