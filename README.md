@@ -96,13 +96,15 @@ Remember, there are 29 inputs available that can be reassigned, not just the fir
 
 ### Selecting a Profile
 
-Inputs 31 and 32 need to be connected to buttons/momentary switches.  Input 30 should be connected to a latching switch.  When it's on then the profile is locked and cannot be changed via the other buttons.
+Inputs 31 (`P-`) and 32 (`P+`) need to be connected to buttons/momentary switches.  Input 30 (`PE`) can be connected to either a latching switch or a momentary switch.  When `PE` is enabled (on) then `P-` and `P+` will cycle through the profiles.
 
-| Input | Action |
-|:-:|:--|
-| `30` | Locks the profile. |
-| `31` | Activates the previous profile. |
-| `32` | Activates the next profile.
+When input 30 (`PE`) is pressed, the display will show **Unlocked** at the top-right corner of the display.
+
+| Input | Label | Action |
+|:-:|:-:|:--|
+| `30` | `PE` | Enable changing the profile (unlock profile selection). |
+| `31` | `P-` | Selects and activates the previous profile. |
+| `32` | `P+` | Selects and activates the next profile. |
 
 ## Inputs and Outputs
 
@@ -127,4 +129,4 @@ Inputs 31 and 32 need to be connected to buttons/momentary switches.  Input 30 s
 | `17` | R3 | RTSB | RTSB | R3 |
 | `18` | TP Key | -- | -- | -- |
 
-For inputs, there are 11 undefined inputs: `19` through `29`.  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.
+For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`).  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.  Inputs 30, 31, and 32 are reserved for profile selection and cannot be remapped.
