@@ -94,7 +94,7 @@ void drawOutputs(uint8_t line, uint32_t data) {
  * @param line the line to start drawing the inputs on
  * @param data the input data
  */
-void drawInputs(int8_t line, uint32_t data) {
+void drawInputs(uint8_t line, uint32_t data) {
     for (int i = 0; i < 16; i ++) {
         if (data >> i & 1) {
             display.fillRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
