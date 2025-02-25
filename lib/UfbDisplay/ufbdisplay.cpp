@@ -4,6 +4,24 @@ Adafruit_SSD1306 display(DISP_WIDTH, DISP_HEIGHT, &Wire, -1);
 uint8_t input_width = 8;
 
 /**
+ * Draws a rectangle on the attached display that's associated with an
+ * input.
+ * 
+ * @param x the X position of the top-left corner
+ * @param y the Y position of the top-left corner
+ * @param w the width of the rectangle
+ * @param h the height of the rectangle
+ * @param enabled if the input is enabled
+ */
+void drawRectangle(uint8_t x, uint8_t y, uint8_t w, uint8_t h, bool enabled) {
+    if (enabled) {
+        display.fillRect(x, y, w, h, SSD1306_WHITE);
+    } else {
+        display.drawRect(x, y, w, h, SSD1306_WHITE);
+    }
+}
+
+/**
  * Draws a square on the attached display that's associated with an 
  * input.
  * 
@@ -13,11 +31,7 @@ uint8_t input_width = 8;
  */
 void drawSquare(uint8_t x, uint8_t y, bool enabled) {
     uint8_t w = 6;
-    if (enabled) {
-        display.fillRect(x, y, w, w, SSD1306_WHITE);
-    } else {
-        display.drawRect(x, y, w, w, SSD1306_WHITE);
-    }
+    drawRectangle(x, y, w, w, enabled);
 }
 
 /**
@@ -50,12 +64,11 @@ bool readInput(uint32_t data, uint8_t input) {
 }
 
 /**
- * Draw the outputs to the screen.
+ * Draw the outputs on the display using the generic fightstick layout.
  * 
- * @param line the line on the display to start drawing the inputs
- * @param data the output data
+ * 
  */
-void drawOutputs(uint8_t line, uint32_t data) {
+void drawOutputsGeneric(uint8_t line, uint32_t data) {
     uint8_t sh = 7;
     uint8_t ch = 10;
     uint8_t chh = (int)ch / 2;
@@ -88,6 +101,55 @@ void drawOutputs(uint8_t line, uint32_t data) {
     }
 }
 
+void drawOutputsController(uint8_t line, uint32_t data) {
+    uint8_t sh = 7;
+    uint8_t ch = 10;
+    uint8_t chh = (int)ch / 2;
+
+    drawSquare(0, line + sh,  readInput(data, 12));       // left
+    drawSquare(2 * sh, line + sh, readInput(data, 13));   // right
+    drawSquare(sh, line, readInput(data, 15));            // up
+    drawSquare(sh, line + (2 * sh), readInput(data, 14)); // down
+
+    drawRectangle(3 * sh + 4, line + 2, 6, 4, readInput(data, 11)); // Select
+    drawRectangle(4 * sh + 4, line + 2, 6, 4, readInput(data, 9));  // Start
+    drawCircle(4 * sh + 3, line + 12, readInput(data, 10));         // Home
+
+    drawSquare(6 * sh + 1, line + sh,  readInput(data, 8));      // square
+    drawSquare(8 * sh + 1, line + sh, readInput(data, 3));       // circle
+    drawSquare(7 * sh + 1, line, readInput(data, 7));            // triangle
+    drawSquare(7 * sh + 1, line + (2 * sh), readInput(data, 4)); // cross
+
+    drawRectangle(10 * sh, line, 10, 6, readInput(data, 5));           // L1
+    drawRectangle(10 * sh + 11, line, 10, 6, readInput(data, 6));      // R1
+    drawRectangle(10 * sh, line + sh, 10, 6, readInput(data, 1));      // L2
+    drawRectangle(10 * sh + 11, line + sh, 10, 6, readInput(data, 2)); // R2
+    drawCircle(7 * ch + 5, line + chh + ch + 3, readInput(data, 16));  // L3
+    drawCircle(8 * ch + 5, line + chh + ch + 3, readInput(data, 17));  // R3
+
+    if (readInput(data, 18)) {
+        display.setCursor(10 * ch + 9, line + 7);
+        display.print("TPK");
+    }
+}
+
+/**
+ * Draw the outputs to the screen.
+ * 
+ * @param line the line on the display to start drawing the inputs
+ * @param data the output data
+ */
+void drawOutputs(uint8_t line, uint32_t data, uint8_t display_type) {
+    switch(display_type) {
+        case 0:
+            drawOutputsGeneric(line, data);
+            break;
+        case 1:
+            drawOutputsController(line, data);
+            break;
+    } 
+}
+
 /**
  * Draw the inputs to the screen.
  * 
@@ -117,7 +179,7 @@ void drawInputs(uint8_t line, uint32_t data) {
  * @param profile the name of the profile in use
  * @param profile_num the number of the profile in use
  */
-void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num) {
+void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, uint8_t display_type) {
     display.setCursor(0, 6);
     display.clearDisplay();
     display.println(F("Current inputs"));
@@ -133,6 +195,6 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     display.setTextColor(WHITE);
     display.setCursor(9, 37);
     display.println(profile_name);
-    drawOutputs(40, output_data);
+    drawOutputs(40, output_data, display_type);
     display.display();
 }

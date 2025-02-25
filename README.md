@@ -70,40 +70,18 @@ The `name` field is what the display will show when you select the profile.  It'
 
 The `mappings` is pretty straightforward.  The first value is the input number on the input board.  There are 29 available inputs, and the first 18 have defaults associated with them.  However, those are just suggestions and really only apply to passthrough mode (Profile 1).  You can map and input to any number of outputs (including none).
 
-The second value is a hexidecimal representation of the outputs that will be activated when you press the input.  The first bit is output 1, second bit is output 2 and so on.  For example, in the `Cool Profile 2` profile, the first mapping shows input `12` being mapped to `00003`.
-
-Input `12` is **left** on the D-pad/Joystick/Fightpad.  The output string breaks out as such (I'm using Python to show the number in binary).  
-
-```python
->>> bin(0x00003)
-'0b11'
-```
-
-So, starting from the right and reading to the left:
-- Bit 1 is 1 which means output 1 is enabled.
-- Bit 2 is 1 which means output 2 is enabled.
-- The rest of the bits are 0 which means ignored.
-
-The end result: when you press **left** (input `12`) it will activate **L2** (output `1`) and **R2** (output `2`).
-
-For a quick snippet of Python to generate those hex values, you can do the following:
-
-```python
->>> outputs = [1, 2, 3, 4, 5, 6, 7, 8]
->>> output_map = sum(1 << i for i in set(outputs)) >> 1
->>> hex(output_map)[2:]
-'ff'
-```
-
-The example creates the hex value needed to turn on outputs 1, 2, 3, 4, 5, 6, 7, and 8. To associate this with pressing input 20:
-
-```json
-"mappings": [
-    [20, "ff"]
-]
-```
+The second is an array of output values.  The input will get matched to any output that is in that array.  For the first profile, the `L2` button gets mapped to every output so if you press `L2` then all of the outputs get activated.
 
 Remember, there are 29 inputs available that can be reassigned, not just the first 18 "default" ones.
+
+### Display
+
+The `display` changes how the outputs are display on the screen.  The default is a standard fightstick configuration.  To change it to a different layout, simply add it to the profile with the value associated with the layout below.
+
+| Number | Description |
+|:-:|:--|
+| `0` | Standard fightstick configuration. |
+| `1` | Generic controller layout (PS, XBox) |
 
 ### Selecting a Profile
 

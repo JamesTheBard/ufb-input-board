@@ -145,5 +145,5 @@ void setup1() {
 }
 
 void loop1() {
-    drawScreen(input_data.load(), output_data.load(), profiles[current_profile.load()].profile_name, current_profile.load());
+    drawScreen(input_data.load(), output_data.load(), profiles[current_profile.load()].profile_name, current_profile.load(), profiles[current_profile.load()].display);
 }
