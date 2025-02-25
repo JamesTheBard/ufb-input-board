@@ -23,17 +23,18 @@ To configure profiles, create the `profiles.json` file in the root of the SD car
 {
     "profiles": [
         {
-            "name": "Cool Profile 1",
+            "name": "Symphony of the Night (PSX)",
             "mappings": [
-                [ 1, "1FFFF"],
-                [ 2, "01000"],
-                [14, "00000"]
+                [ 1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]],
+                [ 2, [1, 2, 3, 4, 5, 6, 7, 8]],
+                [14, [9, 10, 11, 12, 13, 14, 15, 16]]
             ]
         },
         {
             "name": "Cool Profile 2",
+            "display": 1,
             "mappings": [
-                [12, "00003"]
+                [12, [1, 2]]
             ]
         }
     ]

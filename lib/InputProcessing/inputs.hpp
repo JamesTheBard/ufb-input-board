@@ -35,6 +35,7 @@ class Profile {
         Profile(String pname, std::map<uint8_t, uint32_t> pmap);
 
         String profile_name = "Unnamed Profile";
+        uint8_t display = 0;
         std::map<uint8_t, uint32_t> profile_map;
 
         uint32_t processInputs(uint32_t data);
