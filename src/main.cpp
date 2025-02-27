@@ -3,12 +3,19 @@
 #include <Fonts/TomThumb.h>
 #include <ufbdisplay.hpp>
 #include <inputs.hpp>
+#include <config.hpp>
 
 #define UFB_ENABLE 22
 #define BOOT_LED 25
 
 uint32_t input_buffer, output_buffer;
 uint32_t profile_debounce = 0;
+
+std::map<uint8_t, Profile> profiles;
+std::atomic<uint32_t> input_data, output_data;
+std::atomic<uint8_t> current_profile;
+std::atomic<uint8_t> disp_address = 0;
+
 
 void setup() {
     pinMode(UFB_ENABLE, OUTPUT);
@@ -18,12 +25,13 @@ void setup() {
     profiles[1] = {"Passthrough (1:1)"}; // No buttons get remapped
 
     current_profile.store(1);
+
     input_data.store(0);
     output_data.store(0);
 
     Serial.begin(9600);
 
-    loadProfilesFromSDCard(profiles);
+    loadProfilesFromSDCard(profiles, disp_address);
 
     Serial.println("Starting SPI busses...");
 
@@ -98,19 +106,19 @@ void loop(){
     // Switch profiles based on 31/32
     if (input_buffer & (1 << 29) && millis() > profile_debounce) {
         if (input_buffer & (1 << 30)) {
-            uint8_t prev_profile = current_profile.load() - 1;
+            const uint8_t prev_profile = current_profile.load() - 1;
             if (prev_profile && profiles.count(prev_profile)) {
-                current_profile.store(prev_profile);
+                current_profile--;
             }
         }
 
         if (input_buffer & (1 << 31)) {
-            uint8_t next_profile = current_profile.load() + 1;
+            const uint8_t next_profile = current_profile.load() + 1;
             if (profiles.count(next_profile)) {
-                current_profile.store(next_profile);
+                current_profile++;
             }
         }
-        
+
         if (input_buffer & (3 << 30)) profile_debounce = millis() + 200;
     }
 
@@ -134,7 +142,8 @@ void setup1() {
     Wire.setSDA(I2C0_SDA);
     Wire.setSCL(I2C0_SCL);
     Wire.setClock(400000);
-    display.begin(SSD1306_SWITCHCAPVCC, DISP_ADDR);
+    do { delay(10); } while (!disp_address.load());
+    display.begin(SSD1306_SWITCHCAPVCC, disp_address.load());
     display.setFont(&TomThumb);
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
@@ -143,5 +152,6 @@ void setup1() {
 }
 
 void loop1() {
-    drawScreen(input_data.load(), output_data.load(), profiles[current_profile.load()].profile_name, current_profile.load(), profiles[current_profile.load()].display);
+    Profile &cprofile = profiles[current_profile.load()];
+    drawScreen(input_data.load(), output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
 }

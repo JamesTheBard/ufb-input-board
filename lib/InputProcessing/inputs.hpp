@@ -4,8 +4,6 @@
 #include <SPI.h>
 #include <atomic>
 #include <map>
-#include <SD.h>
-#include <ArduinoJson.h>
 
 #define SPI0_MISO  0
 #define SPI0_SCLK  2
@@ -22,11 +20,9 @@
 
 #define OUTPUT_TOTAL 18
 
-#define SPI1_MISO  8
-#define SPI1_SCLK 10
-#define SPI1_MOSI 11
 
-#define SDCARD_SS 12
+extern SPISettings inputSettings, outputSettings;
+
 
 class Profile {
     public:
@@ -35,7 +31,7 @@ class Profile {
         Profile(String pname, std::map<uint8_t, uint32_t> pmap);
 
         String profile_name = "Unnamed Profile";
-        uint8_t display = 0;
+        uint8_t layout = 0;
         std::map<uint8_t, uint32_t> profile_map;
 
         uint32_t processInputs(uint32_t data);
@@ -48,12 +44,5 @@ class Profile {
 };
 
 uint32_t reverseBytes(uint32_t data);
-bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles);
-
-extern SPISettings inputSettings, outputSettings;
-extern std::atomic<uint32_t> input_data;
-extern std::atomic<uint32_t> output_data;
-extern std::atomic<uint8_t> current_profile;
-extern std::map<uint8_t, Profile> profiles;
 
 #endif // _INPUTS_HPP

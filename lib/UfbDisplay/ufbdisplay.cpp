@@ -66,9 +66,10 @@ bool readInput(uint32_t data, uint8_t input) {
 /**
  * Draw the outputs on the display using the generic fightstick layout.
  * 
- * 
+ * @param line the line of the display to start drawing the outputs
+ * @param data the output data
  */
-void drawOutputsGeneric(uint8_t line, uint32_t data) {
+void drawOutputsFightstick(uint8_t line, uint32_t data) {
     uint8_t sh = 7;
     uint8_t ch = 10;
     uint8_t chh = (int)ch / 2;
@@ -101,6 +102,51 @@ void drawOutputsGeneric(uint8_t line, uint32_t data) {
     }
 }
 
+/**
+ * Draw the outputs on the display using the generic fightstick layout.
+ * 
+ * @param line the line of the display to start drawing the outputs
+ * @param data the output data
+ */
+void drawOutputsHitbox(uint8_t line, uint32_t data) {
+    uint8_t sh = 7;
+    uint8_t ch = 10;
+    uint8_t chh = (int)ch / 2;
+
+    drawCircle(chh, line + chh, readInput(data, 12));                 // left
+    drawCircle(chh + ch, line + chh, readInput(data, 14));            // down
+    drawCircle(2 * ch + 4, line + ch - 1, readInput(data, 13));       // right
+    drawCircle(2 * ch + chh, line + 2 * ch - 1, readInput(data, 15)); // up
+
+    drawCircle(3 * ch + 5, line + chh, readInput(data, 8)); // 1P - Square
+    drawCircle(4 * ch + 5, line + chh, readInput(data, 7)); // 2P - Triangle
+    drawCircle(5 * ch + 5, line + chh, readInput(data, 6)); // 3P - R1
+    drawCircle(6 * ch + 5, line + chh, readInput(data, 5)); // 4P - L1
+
+    drawCircle(3 * ch + 5, line + chh + ch, readInput(data, 4)); // 1K - Cross
+    drawCircle(4 * ch + 5, line + chh + ch, readInput(data, 3)); // 2K - Circle
+    drawCircle(5 * ch + 5, line + chh + ch, readInput(data, 2)); // 3K - R2
+    drawCircle(6 * ch + 5, line + chh + ch, readInput(data, 1)); // 4K - L2
+
+    drawSquare(7 * ch + chh + 4, line + 2, readInput(data, 11));             // Select
+    drawSquare(7 * ch + chh + sh + 4, line + 2, readInput(data, 9));         // Start
+    drawSquare(7 * ch + chh + (2 * sh) + 4, line + 2, readInput(data,  10)); // Home
+
+    drawCircle(8 * ch + 3, line + chh + ch, readInput(data, 16)); // L3
+    drawCircle(9 * ch + 4, line + chh + ch, readInput(data, 17)); // R3
+
+    if (readInput(data, 18)) {
+        display.setCursor(10 * ch + 9, line + 7);
+        display.print("TPK");
+    }
+}
+
+/**
+ * Draw the outputs on the display in the style of a PS/XBOX controller layout.
+ * 
+ * @param line the line on the display to start drawing the layout
+ * @param data the output data
+ */
 void drawOutputsController(uint8_t line, uint32_t data) {
     uint8_t sh = 7;
     uint8_t ch = 10;
@@ -138,16 +184,22 @@ void drawOutputsController(uint8_t line, uint32_t data) {
  * 
  * @param line the line on the display to start drawing the inputs
  * @param data the output data
+ * @param display_type the layout of the outputs
  */
-void drawOutputs(uint8_t line, uint32_t data, uint8_t display_type) {
+void drawOutputs(uint8_t line, uint32_t data, DisplayOptions display_type) {
     switch(display_type) {
-        case 0:
-            drawOutputsGeneric(line, data);
-            break;
-        case 1:
+        case DisplayOptions::FIGHTSTICK:
+            drawOutputsFightstick(line, data);
+            return;
+        case DisplayOptions::CONTROLLER:
             drawOutputsController(line, data);
-            break;
-    } 
+            return;
+        case DisplayOptions::HITBOX:
+            drawOutputsHitbox(line, data);
+            return;
+        default:
+            return;
+    }
 }
 
 /**
@@ -178,8 +230,9 @@ void drawInputs(uint8_t line, uint32_t data) {
  * @param output_data the output data
  * @param profile the name of the profile in use
  * @param profile_num the number of the profile in use
+ * @param display_type the display layout to use
  */
-void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, uint8_t display_type) {
+void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, DisplayOptions display_type) {
     display.setCursor(0, 6);
     display.clearDisplay();
     display.println(F("Current inputs"));
@@ -197,4 +250,17 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     display.println(profile_name);
     drawOutputs(40, output_data, display_type);
     display.display();
+}
+
+/**
+ * Draw the screen with all of the inputs and outputs.
+ * 
+ * @param input_data the input data
+ * @param output_data the output data
+ * @param profile the name of the profile in use
+ * @param profile_num the number of the profile in use
+ * @param display_type the display layout to use
+ */
+void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, uint8_t display_type) {
+    drawScreen(input_data, output_data, profile_name, profile_num, static_cast<DisplayOptions>(display_type));
 }

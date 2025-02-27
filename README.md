@@ -15,16 +15,20 @@ The final bit is SD card support.  Profiles are loaded on the microSD card on th
 
 ## Profiles
 
-To configure profiles, create the `profiles.json` file in the root of the SD card.
+To configure profiles, default layout, and the display address, create the `profiles.json` file in the root of the SD card.
 
 ### File Structure
 
 ```json
 {
+    "display": {
+        "address": "0x3C",
+        "default_layout": 0
+    },
     "profiles": [
         {
             "name": "Symphony of the Night (PSX)",
-            "display": 1,
+            "layout": 2,
             "mappings": [
                 [ 1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]],
                 [ 2, [1, 2, 3, 4, 5, 6, 7, 8]],
@@ -32,7 +36,8 @@ To configure profiles, create the `profiles.json` file in the root of the SD car
             ]
         },
         {
-            "name": "Cool Profile 2",
+            "name": "Hitbox Profile",
+            "layout": 1,
             "mappings": [
                 [12, [1, 2]]
             ]
@@ -41,7 +46,21 @@ To configure profiles, create the `profiles.json` file in the root of the SD car
 }
 ```
 
-### Breakdown
+## Display
+
+The display address is set in the configuration file, but defaults to `0x3C` if it's not defined.  If you want to disable the display, you can set an address of "00" which will prevent the screen from turning on.  The value of "address" needs to be a string, and it needs to be hexadecimal otherwise your display will not work.  In the file above, the address `0x3C` is used.
+
+```json
+"display": {
+    "address": "0x3C"
+}
+```
+
+## Default Layout
+
+The default layout sets the default way that outputs are shown on the display.  In the example above, the default layout is configured to be a hitbox/stickless configuration.  This can be overriden on a profile-by-profile basis.  See the layout section for more information.
+
+## Profiles
 
 Profiles control how the 29 inputs are mapped to the 17 outputs.  The default profile is always `Passthrough (1:1)` which is associated with profile 1.  Any profiles defined in the `profiles.json` file will show up in slot 2 and above in the order they appear in the `profiles.json` file.
 
@@ -74,14 +93,15 @@ The second is an array of output values.  The input will get matched to any outp
 
 Remember, there are 29 inputs available that can be reassigned, not just the first 18 "default" ones.
 
-### Display
+### Layout
 
-The `display` changes how the outputs are display on the screen.  The default is a standard fightstick configuration.  To change it to a different layout, simply add it to the profile with the value associated with the layout below.
+The `layout` changes how the outputs are display on the screen.  The default is a standard fightstick configuration.  To change it to a different layout, simply add it to the profile with the value associated with the layout below.
 
 | Number | Description |
 |:-:|:--|
-| `0` | Standard fightstick configuration. |
-| `1` | Generic controller layout (PS, XBox) |
+| `0` | Standard fightstick configuration |
+| `1` | Standard hitbox configuration |
+| `2` | Generic controller layout (PS, XBox) |
 
 ### Selecting a Profile
 
