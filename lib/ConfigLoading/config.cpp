@@ -71,21 +71,25 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<ui
         profiles[pcount] = Profile();
         profiles[pcount].layout = default_layout;
         for (JsonPair kv : pobj) {
-            if (String(kv.key().c_str()) == "name") {
+            if (kv.key() == "name") {
                 profiles[pcount].profile_name = kv.value().as<String>();
             }
-            if (String(kv.key().c_str()) == "mappings") {
+            if (kv.key() == "mappings") {
                 for (JsonArray marray : kv.value().as<JsonArray>()) {
-                    if (marray[0].as<uint8_t>() >= 30) continue; // ignore profile button remaps (inputs 30-32)
+                    if (!marray[0].is<uint8_t>()) continue;
+
+                    const uint8_t input_id = marray[0].as<uint8_t>();
+                    if (input_id >= 30 || input_id == 0) continue; // ignore profile button remaps (inputs 30-32)
+
                     uint32_t output_mask = 0;
                     for (uint8_t output : marray[1].as<JsonArray>()) {
                         if (output > OUTPUT_TOTAL) continue;
                         output_mask ^= (1 << (output - 1));
                     }
-                    profiles[pcount].profile_map[marray[0].as<uint8_t>()] = output_mask;
+                    profiles[pcount].profile_map[input_id] = output_mask;
                 }
             }
-            if (String(kv.key().c_str()) == "layout") {
+            if (kv.key() == "layout") {
                 profiles[pcount].layout = kv.value().as<uint8_t>();
             }
         }
