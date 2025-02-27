@@ -144,6 +144,7 @@ void setup1() {
     Wire.setClock(400000);
     do { delay(10); } while (!disp_address.load());
     display.begin(SSD1306_SWITCHCAPVCC, disp_address.load());
+    display.dim(true);
     display.setFont(&TomThumb);
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
