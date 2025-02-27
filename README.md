@@ -62,6 +62,12 @@ The display address is set in the configuration file, but defaults to `0x3C` if 
 
 The default layout sets the default way that outputs are shown on the display.  In the example above, the default layout is configured to be a hitbox/stickless configuration.  This can be overriden on a profile-by-profile basis.  See the layout section for more information.
 
+```json
+"display": {
+    "default_layout": 0
+}
+```
+
 ## Profiles
 
 Profiles control how the 29 inputs are mapped to the 17 outputs.  The default profile is always `Passthrough (1:1)` which is associated with profile 1.  Any profiles defined in the `profiles.json` file will show up in slot 2 and above in the order they appear in the `profiles.json` file.
