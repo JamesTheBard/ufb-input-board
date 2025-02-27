@@ -142,7 +142,7 @@ When input 30 (`PE`) is pressed, the display will show **Unlocked** at the top-r
 
 For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`).  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.  Inputs 30, 31, and 32 are reserved for profile selection and cannot be remapped.
 
-## Footnotes
+### Footnotes
 
 [^1]: This board is full of "old-school" components.  The shift registers on the input board (`SN74HC165`) started manufacture in 1982 as well as the ones on the adapter board (`SN74HC595`).
 
