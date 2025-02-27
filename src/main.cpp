@@ -33,7 +33,7 @@ void setup() {
     SPI.setSCK(SPI0_SCLK);
     SPI.begin();
 
-    
+    // Pin configurations
     pinMode(INPUT_LATCH, OUTPUT);
     pinMode(INPUT_CE, OUTPUT);
 
@@ -45,8 +45,6 @@ void setup() {
     digitalWrite(INPUT_CE, HIGH);
     digitalWrite(OUTPUT_CE, HIGH);
     digitalWrite(OUTPUT_CLR, HIGH);
-
-    current_profile.store(1);
 
     Serial.println("Starting controller...");
 

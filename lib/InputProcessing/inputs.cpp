@@ -68,15 +68,15 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles) {
 
     if (!SD.begin(SDCARD_SS, SPI1)) {
         Serial.println("SDCard is has either failed or is not present, skipping.");
-        return false;
         SPI1.end();
+        return false;
     }
 
     File pfile = SD.open("profiles.json");
     if (!pfile) { 
         Serial.println("Could not open the profiles configuration 'profiles.json', skipping.");
-        return false;
         SPI1.end();
+        return false;
     }
 
     JsonDocument doc;
