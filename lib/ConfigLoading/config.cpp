@@ -90,7 +90,8 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<ui
                 }
             }
             if (kv.key() == "layout") {
-                profiles[pcount].layout = kv.value().as<uint8_t>();
+                if (kv.value().is<uint8_t>())
+                    profiles[pcount].layout = kv.value().as<uint8_t>();
             }
         }
         profiles[pcount].generateMask();
