@@ -32,7 +32,7 @@ void Profile::generateMask() {
  * @param data the input data
  * @return the processed output data
  */
-uint32_t Profile::processInputs(const uint32_t data) {
+uint32_t Profile::processInputs(uint32_t data) {
     if (is_passthrough) return data;
 
     uint32_t processed_data = data & mask;
@@ -48,6 +48,6 @@ uint32_t Profile::processInputs(const uint32_t data) {
  * @param data the data to reverse
  * @return the reversed data
  */
-uint32_t reverseBytes(const uint32_t data) {
+uint32_t reverseBytes(uint32_t data) {
     return ((data & 0xFF) << 24 | (data & 0xFF00) << 8 | (data & 0xFF0000) >> 8 | (data >> 24));
 }

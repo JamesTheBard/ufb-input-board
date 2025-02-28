@@ -34,7 +34,7 @@ class Profile {
         uint8_t layout = 0;
         std::map<uint8_t, uint32_t> profile_map;
 
-        uint32_t processInputs(const uint32_t data);
+        uint32_t processInputs(uint32_t data);
         void generateMask();
 
     private:
@@ -43,6 +43,6 @@ class Profile {
 
 };
 
-uint32_t reverseBytes(const uint32_t data);
+uint32_t reverseBytes(uint32_t data);
 
 #endif // _INPUTS_HPP
