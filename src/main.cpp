@@ -10,6 +10,7 @@
 
 uint32_t input_buffer, output_buffer;
 uint32_t profile_debounce = 0;
+uint8_t display_data = 0xFFFFFFFF;
 
 std::map<uint8_t, Profile> profiles;
 std::atomic<uint32_t> input_data, output_data;
@@ -152,7 +153,11 @@ void setup1() {
     delay(1000);
 }
 
+
 void loop1() {
+    if (input_data.load() == display_data) return;
+
+    display_data = input_data.load();
     Profile &cprofile = profiles[current_profile.load()];
-    drawScreen(input_data.load(), output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
+    drawScreen(display_data, output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
 }
