@@ -13,14 +13,11 @@ void initDisplay(String display_type) {
     if (display_type == "SH1106") {
         display = U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
     }
-    else if (display_type == "SSD1309" || display_type == "CH1119") {
-        display = U8G2_SSD1309_128X64_NONAME0_1_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
-    }
     else {
         display = U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
     }
     display.begin();
-    display.setContrast(10);
+    display.setContrast(30);
     display.setFont(u8g2_font_spleen5x8_mr);
 }
 
@@ -276,7 +273,7 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     display.setFont(u8g2_font_spleen5x8_mr);
     display.println(profile_name);
     drawOutputs(40, output_data, display_type);
-    
+
     display.sendBuffer();
 }
 
