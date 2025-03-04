@@ -107,14 +107,14 @@ void loop(){
         if (input_buffer & (1 << 30)) {
             const uint8_t prev_profile = current_profile.load() - 1;
             if (prev_profile && profiles.count(prev_profile)) {
-                current_profile--;
+                current_profile.store(prev_profile);
             }
         }
 
         if (input_buffer & (1 << 31)) {
             const uint8_t next_profile = current_profile.load() + 1;
             if (profiles.count(next_profile)) {
-                current_profile++;
+                current_profile.store(next_profile);
             }
         }
 
