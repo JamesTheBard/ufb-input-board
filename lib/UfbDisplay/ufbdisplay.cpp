@@ -263,11 +263,11 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     drawInputs(8, input_data);
 
     // Draw lower-half (outputs)
-    display.drawRBox(0, 30, 9, 8, 1);
+    display.drawRBox(0, 30, 8, 8, 1);
     display.setFontMode(1);
     display.setFont(u8g2_font_squeezed_b6_tn);
     display.setDrawColor(0);
-    display.setCursor(3, 37);
+    display.setCursor(2, 37);
     display.print(profile_num);
     display.setDrawColor(1);
     display.setCursor(12, 37);
