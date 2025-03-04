@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <SPI.h>
-#include <Fonts/TomThumb.h>
 #include <ufbdisplay.hpp>
 #include <inputs.hpp>
 #include <config.hpp>
@@ -16,6 +15,8 @@ std::map<uint8_t, Profile> profiles;
 std::atomic<uint32_t> input_data, output_data;
 std::atomic<uint8_t> current_profile;
 std::atomic<uint8_t> disp_address = 0;
+std::atomic<bool> config_loaded = false;
+String display_type;
 
 
 void setup() {
@@ -32,7 +33,8 @@ void setup() {
 
     Serial.begin(9600);
 
-    loadProfilesFromSDCard(profiles, disp_address);
+    Serial.println("Loading config file...");
+    config_loaded = loadProfilesFromSDCard(profiles, disp_address, display_type);
 
     Serial.println("Starting SPI busses...");
 
@@ -140,24 +142,19 @@ void loop(){
 }
 
 void setup1() {
-    Wire.setSDA(I2C0_SDA);
-    Wire.setSCL(I2C0_SCL);
-    Wire.setClock(400000);
-    do { delay(10); } while (!disp_address.load());
-    display.begin(SSD1306_SWITCHCAPVCC, disp_address.load());
-    display.dim(true);
-    display.setFont(&TomThumb);
-    display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
-    display.display();
-    delay(1000);
+    do { delay(10); } while (!config_loaded.load());
+    delay(100);
+    initDisplay(display_type);
 }
 
+uint32_t display_data = 0xFFFFFFFF;
 
 void loop1() {
-    if (input_data.load() == display_data) return;
+    if (display_data == input_data.load()) return;
 
-    display_data = input_data.load();
     Profile &cprofile = profiles[current_profile.load()];
-    drawScreen(display_data, output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
+    display.clearBuffer();
+    drawScreen(input_data.load(), output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
+    display.sendBuffer();
+
 }

@@ -1,7 +1,28 @@
 #include "ufbdisplay.hpp"
 
-Adafruit_SSD1306 display(DISP_WIDTH, DISP_HEIGHT, &Wire, -1);
+U8G2 display;
 uint8_t input_width = 8;
+
+/**
+ * Init display
+ * 
+ * @param display the type of display used
+ * 
+ */
+void initDisplay(String display_type) {
+    if (display_type == "SH1106") {
+        display = U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+    }
+    else if (display_type == "SSD1309" || display_type == "CH1119") {
+        display = U8G2_SSD1309_128X64_NONAME0_1_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+    }
+    else {
+        display = U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+    }
+    display.begin();
+    display.setContrast(10);
+    display.setFont(u8g2_font_spleen5x8_mr);
+}
 
 /**
  * Draws a rectangle on the attached display that's associated with an
@@ -14,10 +35,11 @@ uint8_t input_width = 8;
  * @param enabled if the input is enabled
  */
 void drawRectangle(uint8_t x, uint8_t y, uint8_t w, uint8_t h, bool enabled) {
+    display.setDrawColor(1);
     if (enabled) {
-        display.fillRect(x, y, w, h, SSD1306_WHITE);
+        display.drawBox(x, y, w, h);
     } else {
-        display.drawRect(x, y, w, h, SSD1306_WHITE);
+        display.drawFrame(x, y, w, h);
     }
 }
 
@@ -45,9 +67,9 @@ void drawSquare(uint8_t x, uint8_t y, bool enabled) {
 void drawCircle(uint8_t x, uint8_t y, bool enabled) {
     uint8_t radius = 4;
     if (enabled) {
-        display.fillCircle(x, y, radius, SSD1306_WHITE);
+        display.drawDisc(x, y, radius, U8G2_DRAW_ALL);
     } else {
-        display.drawCircle(x, y, radius, SSD1306_WHITE);
+        display.drawCircle(x, y, radius, U8G2_DRAW_ALL);
     }
 }
 
@@ -210,16 +232,8 @@ void drawOutputs(uint8_t line, uint32_t data, DisplayOptions display_type) {
  */
 void drawInputs(uint8_t line, uint32_t data) {
     for (int i = 0; i < 16; i ++) {
-        if (data >> i & 1) {
-            display.fillRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
-        } else {
-            display.drawRect(i * input_width, line, input_width - 1, input_width - 1, SSD1306_WHITE);
-        }
-        if (data >> (i + 16) & 1) {
-            display.fillRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
-        } else {
-            display.drawRect(i * input_width, line + input_width, input_width - 1, input_width - 1, SSD1306_WHITE);
-        }
+        drawRectangle(i * input_width, line, input_width - 1, input_width - 1, data >> i & 1);
+        drawRectangle(i * input_width, line + input_width, input_width - 1, input_width - 1, data >> (i + 16) & 1);
     }
 }
 
@@ -233,20 +247,31 @@ void drawInputs(uint8_t line, uint32_t data) {
  * @param display_type the display layout to use
  */
 void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, DisplayOptions display_type) {
+    // Draw upper-half (inputs)
+    display.setFont(u8g2_font_spleen5x8_mr);
     display.setCursor(0, 6);
-    display.clearDisplay();
-    display.println(F("Current inputs"));
-    if (input_data >> 29 && 1) {
-        display.setCursor(96, 6);
-        display.print("Unlocked");
+    display.println("Current inputs");
+    if (readInput(input_data, 30)) {
+        display.setFont(u8g2_font_tom_thumb_4x6_tr);
+        display.drawRBox(100, 0, 27, 7, 1);
+        display.setDrawColor(0);
+        display.setCursor(102, 6);
+        display.print("Unlock");
+        display.setDrawColor(1);
+        display.setFont(u8g2_font_spleen5x8_mr);
     }
     drawInputs(8, input_data);
-    display.fillRoundRect(0, 31, 7, 7, 1, SSD1306_WHITE);
-    display.setCursor(2, 37);
-    display.setTextColor(BLACK);
+
+    // Draw lower-half (outputs)
+    display.drawRBox(0, 30, 9, 8, 1);
+    display.setFontMode(1);
+    display.setFont(u8g2_font_squeezed_b6_tn);
+    display.setDrawColor(0);
+    display.setCursor(3, 37);
     display.print(profile_num);
-    display.setTextColor(WHITE);
-    display.setCursor(9, 37);
+    display.setDrawColor(1);
+    display.setCursor(12, 37);
+    display.setFont(u8g2_font_spleen5x8_mr);
     display.println(profile_name);
     drawOutputs(40, output_data, display_type);
     display.display();

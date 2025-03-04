@@ -15,6 +15,6 @@
 #define SDCARD_SS 12
 #define DISP_DEFAULT_ADDR  0x3C
 
-bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<uint8_t> &display_addr);
+bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<uint8_t> &display_addr, String &display_type);
 
 #endif // _CONFIG_HPP

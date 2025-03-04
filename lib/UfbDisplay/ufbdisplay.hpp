@@ -3,8 +3,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#include <U8g2lib.h>
 
 #define I2C0_SDA 4
 #define I2C0_SCL 5
@@ -12,7 +11,7 @@
 #define DISP_WIDTH  128
 #define DISP_HEIGHT  64
 
-extern Adafruit_SSD1306 display;
+extern U8G2 display;
 
 enum class DisplayOptions {
     FIGHTSTICK,
@@ -20,7 +19,9 @@ enum class DisplayOptions {
     CONTROLLER
 };
 
+void initDisplay(String display_type);
 void drawSquare(uint8_t x, uint8_t y, bool enabled);
+void drawRectangle(uint8_t x, uint8_t y, uint8_t w, uint8_t h, bool enabled);
 void drawCircle(uint8_t x, uint8_t y, bool enabled);
 bool readInput(uint32_t data, uint8_t input);
 void drawOutputs(uint8_t line, uint32_t data, DisplayOptions display_type);
