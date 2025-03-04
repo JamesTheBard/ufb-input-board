@@ -85,10 +85,6 @@ The default layout sets the default way that outputs are shown on the display.  
 }
 ```
 
-## Display Type
-
-The display type sets which display library to use based on the display IC.  Most 
-
 ## Profiles
 
 Profiles control how the 29 inputs are mapped to the 18 outputs.  The default profile is always `Passthrough (1:1)` which is associated with profile 1.  Any profiles defined in the `profiles.json` file will show up in slot 2 and above in the order they appear in the `profiles.json` file.
@@ -122,6 +118,27 @@ The `name` field is what the display will show when you select the profile.  It'
 The `mappings` is pretty straightforward.  The first value is the input number on the input board.  There are 29 available inputs, and the first 18 have defaults associated with them.  However, those are just suggestions and really only apply to passthrough mode (Profile 1).  You can map and input to any number of outputs (including none).
 
 The second is an array of output values.  The input will get matched to any output that is in that array.  For the first profile, the `L2` button gets mapped to every output so if you press `L2` then all of the outputs get activated.
+
+```json
+"profiles": [
+    {
+        "name": "Symphony of the Night (PSX)",
+        "layout": 2,
+        "mappings": [
+            [ 1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]],
+            [ 2, [1, 2, 3, 4, 5, 6, 7, 8]],
+            [14, [9, 10, 11, 12, 13, 14, 15, 16]]
+        ]
+    },
+```
+
+In the example above, in the "Symphony of the Night (PSX)" profile there are three button maps defined: the first is associated with `L2` (input 1), the second with `R2` (input 2), and the third with `Down` (input 14).
+
+For the `L2` input, it presses literally all of the outputs.
+
+For the `R2` input, it presses the first eight outputs (`L2`, `R2`, `Circle`, `Cross`, `L1`, `R1`, `Triangle`, and `Square`).
+
+For the `Down` input, it presses `Select`, `Start`, `Home`, all of the directional buttons, and `L3`.
 
 Remember, there are 29 inputs available that can be reassigned, not just the first 18 "default" ones.
 
