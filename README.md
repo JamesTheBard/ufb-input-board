@@ -102,7 +102,7 @@ A user-defined profile will use what's called the mapping mode.  This does add a
 | Mode | Absolute Worst | Typical Worst | Minimum | Polling Interval | Processing Interval |
 |:-:|:-:|:-:|:-:|:-:|:-:|
 | `passthrough` | 87.0 μsec | 57.6 μsec | 43.5 μsec | 14.1 μsec | 43.5 μsec |
-| `mapping` | 88.8 μsec* | 58.5 μsec* | 44.4 μsec | 14.1 μsec | 44.4 μsec |
+| `mapping` | 93.0 μsec* | 60.6 μsec* | 46.5 μsec | 14.1 μsec | 46.5 μsec |
 
 Notes:
 - **Absolute Worst** occurs when an input gets processed and immediately after the processing interval another input is read.  This leads to a lag of two times the processing interval.
