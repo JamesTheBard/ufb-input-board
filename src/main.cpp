@@ -146,6 +146,7 @@ uint32_t display_data = 0xFFFFFFFF;
 
 void loop1() {
     if (display_data == input_data.load()) return;
+    display_data = input_data.load();
 
     Profile &cprofile = profiles[current_profile.load()];
     drawScreen(input_data.load(), output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
