@@ -152,8 +152,5 @@ void loop1() {
     if (display_data == input_data.load()) return;
 
     Profile &cprofile = profiles[current_profile.load()];
-    display.clearBuffer();
     drawScreen(input_data.load(), output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
-    display.sendBuffer();
-
 }

@@ -11,8 +11,6 @@
 #define DISP_WIDTH  128
 #define DISP_HEIGHT  64
 
-extern U8G2 display;
-
 enum class DisplayOptions {
     FIGHTSTICK,
     HITBOX,

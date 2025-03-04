@@ -247,6 +247,8 @@ void drawInputs(uint8_t line, uint32_t data) {
  * @param display_type the display layout to use
  */
 void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, DisplayOptions display_type) {
+    display.clearBuffer();
+
     // Draw upper-half (inputs)
     display.setFont(u8g2_font_spleen5x8_mr);
     display.setCursor(0, 6);
@@ -274,7 +276,8 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     display.setFont(u8g2_font_spleen5x8_mr);
     display.println(profile_name);
     drawOutputs(40, output_data, display_type);
-    display.display();
+    
+    display.sendBuffer();
 }
 
 /**
