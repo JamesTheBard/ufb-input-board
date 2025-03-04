@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <SPI.h>
-#include <Fonts/TomThumb.h>
 #include <ufbdisplay.hpp>
 #include <inputs.hpp>
 #include <config.hpp>
