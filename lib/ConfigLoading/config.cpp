@@ -6,8 +6,8 @@
  * @param display_addr the display address to use
  */
 void cleanup(std::atomic<uint8_t> &display_addr) {
-    cleanup(display_addr);
     display_addr = DISP_DEFAULT_ADDR;
+    SPI1.end();
 }
 
 /**
@@ -16,7 +16,7 @@ void cleanup(std::atomic<uint8_t> &display_addr) {
  * @param profiles the profile map to load the profiles into
  * @return whether reading the profiles was successful
  */
-bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<uint8_t> &display_addr) {
+bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<uint8_t> &display_addr, String &display_type) {
     SPI1.setRX(SPI1_MISO);
     SPI1.setTX(SPI1_MOSI);
     SPI1.setSCK(SPI1_SCLK);
@@ -24,14 +24,14 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<ui
     if (!SD.begin(SDCARD_SS, SPI1)) {
         Serial.println("SDCard is has either failed or is not present, skipping.");
         cleanup(display_addr);
-        return false;
+        return true;
     }
 
     File pfile = SD.open("profiles.json");
     if (!pfile) { 
         Serial.println("Could not open the profiles configuration 'profiles.json', skipping.");
         cleanup(display_addr);
-        return false;
+        return true;
     }
 
     JsonDocument doc;
@@ -41,7 +41,7 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<ui
         Serial.println(error.f_str());
         pfile.close();
         cleanup(display_addr);
-        return false;
+        return true;
     }
 
     Serial.println("Loading profiles...");
@@ -62,6 +62,12 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<ui
         if (display_config["default_layout"].is<uint8_t>()) {
             default_layout = display_config["default_layout"];
             profiles[1].layout = default_layout;
+        }
+
+        if (display_config["type"].is<String>()) {
+            display_type = display_config["type"].as<String>();
+        } else {
+            display_type = "";
         }
     }
   

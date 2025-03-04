@@ -23,7 +23,8 @@ To configure profiles, default layout, and the display address, create the `prof
 {
     "display": {
         "address": "0x3C",
-        "default_layout": 0
+        "default_layout": 0,
+        "type": "SSD1306"
     },
     "profiles": [
         {
@@ -48,7 +49,19 @@ To configure profiles, default layout, and the display address, create the `prof
 
 ## Display
 
-Currently, the firmware only supports I2C displays powered by the SSD1306 OLED/PLED driver.  Common sizes of available displays are 0.96", 1.54", and 2.42".  Most 1.3" OLED displays use the SSH1106 driver which is not currently supported.
+## Display Type
+
+Currently, the firmware only supports I2C displays powered by the SSD1306 and SH1106 OLED/PLED drivers.  Common sizes of available displays are 0.96", 1.3", and 2.42".  If using a display, the resolution should be 128 pixels by 64 pixels.
+
+The default display type is the `SSD1306`, but if you happen to have an SH1106 display, you can set that in the config file.
+
+```json
+"display": {
+    "type": "SH1106"
+}
+```
+
+## Display Address
 
 The display address is set in the configuration file, but defaults to `0x3C` if it's not defined.  If you want to disable the display, you can set an address of `0x00` which will prevent the screen from turning on.  The value of "address" needs to be a string, and it needs to be hexadecimal otherwise your display will not work.  In the file above, the address `0x3C` is used.
 
@@ -67,6 +80,10 @@ The default layout sets the default way that outputs are shown on the display.  
     "default_layout": 0
 }
 ```
+
+## Display Type
+
+The display type sets which display library to use based on the display IC.  Most 
 
 ## Profiles
 
