@@ -99,15 +99,15 @@ A user-defined profile will use what's called the mapping mode.  This does add a
 
 ### Lag
 
-| Mode | Absolute Worst | Typical Worst | Minimum |
-|:-:|:-:|:-:|:-:|
-| `passthrough` | 87.0 μsec | 57.6 μsec | 28.2 μsec |
-| `mapping` | 88.8 μsec* | 58.5 μsec* | 28.2 μsec |
+| Mode | Absolute Worst | Typical Worst | Minimum | Polling Interval | Processing Interval |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| `passthrough` | 87.0 μsec | 57.6 μsec | 43.5 μsec | 14.1 μsec | 43.5 μsec |
+| `mapping` | 88.8 μsec* | 58.5 μsec* | 44.4 μsec | 14.1 μsec | 44.4 μsec |
 
 Notes:
-- **Absolute Worst** occurs when an input gets processed and after processing another input is read.  The window for this is 31.8 microseconds in passthrough mode and 38.8 microseconds in mapping mode and pretty difficult to trigger. In mapping mode, the **Absolute Worst** and **Typical Worst** can be exceeded if a ton of button mappings are defined, but still should remain under 100 and 85 microseconds respectively.
-- **Typical Worst** occurs outside of the specific case mentioned in **Absolute Worst**.  The controller polls inputs as quickly as possible, and if there are no changes in the inputs from the previous poll it skips all processing and polls again.  The interval on this is 15.3 microseconds.
-- **Minimum** is the processing interval for each mode to include reading the inputs from the four `74HC165`s and writing the outputs to the three `74HC595`s.
+- **Absolute Worst** occurs when an input gets processed and immediately after the processing interval another input is read.  This leads to a lag of two times the processing interval.
+- **Typical Worst** occurs when there wasn't an input being processed in the previous interval and it reads an input.  This leads to a lag of the polling interval plus the processing interval.
+- **Minimum** is the processing interval for each mode to include reading the inputs from the four `74HC165`s and writing the outputs to the three `74HC595`s.  The lag for this should be the processing interval.
 - The stated lag does not include any lag associated with the Brook Universal Fighting Board.
 - If the _Profile Enable_ button is held down, this adds 5 to 10 microseconds of lag across all modes.
 
