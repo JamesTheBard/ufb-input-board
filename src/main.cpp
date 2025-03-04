@@ -9,7 +9,6 @@
 
 uint32_t input_buffer, output_buffer;
 uint32_t profile_debounce = 0;
-uint8_t display_data = 0xFFFFFFFF;
 
 std::map<uint8_t, Profile> profiles;
 std::atomic<uint32_t> input_data, output_data;
