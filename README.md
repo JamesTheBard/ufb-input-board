@@ -108,6 +108,8 @@ Notes:
 - **Absolute Worst** occurs when an input gets processed and immediately after the processing interval another input is read.  This leads to a lag of two times the processing interval.
 - **Typical Worst** occurs when there wasn't an input being processed in the previous interval and it reads an input.  This leads to a lag of the polling interval plus the processing interval.
 - **Minimum** is the processing interval for each mode to include reading the inputs from the four `74HC165`s and writing the outputs to the three `74HC595`s.  The lag for this should be the processing interval.
+- **Polling Interval** is how long it takes to read all of the inputs.
+- **Processing Interval** is how long it takes to read all the inputs, detect a change, process the inputs, and write all of the outputs.
 - The stated lag does not include any lag associated with the Brook Universal Fighting Board.
 - If the _Profile Enable_ button is held down, this adds 5 to 10 microseconds of lag across all modes.
 
