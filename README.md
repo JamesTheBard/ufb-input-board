@@ -136,7 +136,7 @@ In the example above, in the "Symphony of the Night (PSX)" profile there are thr
 
 For the `L2` input, it presses literally all of the outputs.
 
-For the `R2` input, it presses the first eight outputs (`L2`, `R2`, `Circle`, `Cross`, `L1`, `R1`, `Triangle`, and `Square`).
+For the `R2` input, it presses the first eight outputs (`L2`, `R2`, `Circle`, `Cross`, `L1`, `R1`, `Triangle`, and `Square`).[^3]
 
 For the `Down` input, it presses `Select`, `Start`, `Home`, all of the directional buttons, and `L3`.
 
@@ -194,3 +194,5 @@ For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`
 [^1]: This board is full of "old-school" components.  The shift registers on the input board (`SN74HC165`) started manufacture in 1982 as well as the ones on the adapter board (`SN74HC595`).
 
 [^2]: You _have_ to use the Type-C connector.  This feeds the +5V to all of the boards and more importantly doesn't go directly to the Brook UFB...which means we can delay the Brook UFB's boot sequence until after everything is ready to go on the input and adapter boards.
+
+[^3]: The first eight inputs are also known as `4K`, `3K`, `2K`, `1K`, `4P`, `3P`, `2P`, and `1P`.
