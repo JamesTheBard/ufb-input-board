@@ -93,7 +93,7 @@ The display type sets which display library to use based on the display IC.  Mos
 
 Profiles control how the 29 inputs are mapped to the 18 outputs.  The default profile is always `Passthrough (1:1)` which is associated with profile 1.  Any profiles defined in the `profiles.json` file will show up in slot 2 and above in the order they appear in the `profiles.json` file.
 
-The passthrough mode will have the lowest lag (around 70 microseconds worst-case scenario) and will pass the inputs directly to the Brook UFB.
+The passthrough mode will have the lowest lag and will pass the inputs directly to the Brook UFB.
 
 A user-defined profile will use what's called the mapping mode.  This does add an additional stage of processing to the inputs which will increase lag, but not by a ton.  The more mappings added, the more time to process and the higher the lag.  However, the lag for the entire mapping processing stage shouldn't exceed 100 microseconds in the absolute worst-case scenario.
 
