@@ -142,7 +142,7 @@ void loop(){
 
 void setup1() {
     do { delay(10); } while (!config_loaded.load());
-    delay(100);
+    // delay(100);
     initDisplay(display_type);
 }
 
