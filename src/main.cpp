@@ -13,9 +13,6 @@ uint32_t profile_debounce = 0;
 std::map<uint8_t, Profile> profiles;
 std::atomic<uint32_t> input_data, output_data;
 std::atomic<uint8_t> current_profile;
-std::atomic<uint8_t> disp_address = 0;
-std::atomic<bool> config_loaded = false;
-String display_type;
 
 
 void setup() {
@@ -142,7 +139,6 @@ void loop(){
 
 void setup1() {
     do { delay(10); } while (!display_config.config_loaded.load());
-    // delay(100);
     initDisplay(display_config.type);
 }
 
