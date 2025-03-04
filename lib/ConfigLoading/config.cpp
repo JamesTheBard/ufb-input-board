@@ -5,8 +5,7 @@
  * 
  * @param display_addr the display address to use
  */
-void cleanup(std::atomic<uint8_t> &display_addr) {
-    display_addr = DISP_DEFAULT_ADDR;
+void cleanup() {
     SPI1.end();
 }
 
@@ -16,21 +15,23 @@ void cleanup(std::atomic<uint8_t> &display_addr) {
  * @param profiles the profile map to load the profiles into
  * @return whether reading the profiles was successful
  */
-bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<uint8_t> &display_addr, String &display_type) {
+bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, DisplayConfig &display_config) {
+    display_config.address = DISP_DEFAULT_ADDR;
+
     SPI1.setRX(SPI1_MISO);
     SPI1.setTX(SPI1_MOSI);
     SPI1.setSCK(SPI1_SCLK);
 
     if (!SD.begin(SDCARD_SS, SPI1)) {
         Serial.println("SDCard is has either failed or is not present, skipping.");
-        cleanup(display_addr);
+        cleanup();
         return true;
     }
 
     File pfile = SD.open("profiles.json");
     if (!pfile) { 
         Serial.println("Could not open the profiles configuration 'profiles.json', skipping.");
-        cleanup(display_addr);
+        cleanup();
         return true;
     }
 
@@ -40,34 +41,30 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, std::atomic<ui
         Serial.print(F("Deserializating profile data failed: "));
         Serial.println(error.f_str());
         pfile.close();
-        cleanup(display_addr);
+        cleanup();
         return true;
     }
 
     Serial.println("Loading profiles...");
 
     uint8_t default_layout = 0;
-    JsonObject display_config = doc["display"];
-    if (display_config != NULL) {
-        if (display_config["address"].is<String>()) {
-            String s = display_config["address"];
+    JsonObject dconfig = doc["display"];
+    if (dconfig != NULL) {
+        if (dconfig["address"].is<String>()) {
+            String s = dconfig["address"];
             if (s.startsWith("0x") || s.startsWith("0X")) {
                 s = s.substring(2);
             }
-            display_addr.store((uint8_t)strtoul(s.c_str(), NULL, 16));
-        } else {
-            display_addr.store(DISP_DEFAULT_ADDR);
+            display_config.address.store((uint8_t)strtoul(s.c_str(), NULL, 16));
         }
 
-        if (display_config["default_layout"].is<uint8_t>()) {
-            default_layout = display_config["default_layout"];
+        if (dconfig["default_layout"].is<uint8_t>()) {
+            default_layout = dconfig["default_layout"];
             profiles[1].layout = default_layout;
         }
 
-        if (display_config["type"].is<String>()) {
-            display_type = display_config["type"].as<String>();
-        } else {
-            display_type = "";
+        if (dconfig["type"].is<String>()) {
+            display_config.type = dconfig["type"].as<String>();
         }
     }
   

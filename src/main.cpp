@@ -33,7 +33,7 @@ void setup() {
     Serial.begin(9600);
 
     Serial.println("Loading config file...");
-    config_loaded = loadProfilesFromSDCard(profiles, disp_address, display_type);
+    display_config.config_loaded.store(loadProfilesFromSDCard(profiles, display_config));
 
     Serial.println("Starting SPI busses...");
 
@@ -141,9 +141,9 @@ void loop(){
 }
 
 void setup1() {
-    do { delay(10); } while (!config_loaded.load());
+    do { delay(10); } while (!display_config.config_loaded.load());
     // delay(100);
-    initDisplay(display_type);
+    initDisplay(display_config.type);
 }
 
 uint32_t display_data = 0xFFFFFFFF;

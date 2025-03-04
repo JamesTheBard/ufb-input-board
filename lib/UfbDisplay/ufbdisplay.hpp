@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <U8g2lib.h>
+#include <atomic>
 
 #define I2C0_SDA 4
 #define I2C0_SCL 5
@@ -16,6 +17,15 @@ enum class DisplayOptions {
     HITBOX,
     CONTROLLER
 };
+
+struct DisplayConfig {
+    std::atomic<bool> config_loaded = false;
+    std::atomic<uint8_t> address = 0x3C;
+    String type = "SSD1306";
+    String resolution = "128x64";
+};
+
+extern DisplayConfig display_config;
 
 void initDisplay(String display_type);
 void drawSquare(uint8_t x, uint8_t y, bool enabled);

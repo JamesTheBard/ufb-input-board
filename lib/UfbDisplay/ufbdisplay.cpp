@@ -2,6 +2,7 @@
 
 U8G2 display;
 uint8_t input_width = 8;
+DisplayConfig display_config;
 
 /**
  * Init display
