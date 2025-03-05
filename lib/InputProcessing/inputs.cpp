@@ -32,7 +32,7 @@ void Profile::generateMask() {
  * @param data the input data
  * @return the processed output data
  */
-uint32_t Profile::processInputs(uint32_t data) {
+uint32_t Profile::processInputs(const uint32_t data) {
     if (is_passthrough) return data;
 
     uint32_t processed_data = data & mask;

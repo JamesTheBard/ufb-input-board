@@ -103,22 +103,19 @@ void loop(){
     if (input_buffer == input_data.load()) return;
 
     // Switch profiles based on 31/32
+    uint8_t selected_profile = current_profile.load(); 
     if (input_buffer & (1 << 29) && millis() > profile_debounce) {
         if (input_buffer & (1 << 30)) {
-            const uint8_t prev_profile = current_profile.load() - 1;
-            if (prev_profile && profiles.count(prev_profile)) {
-                current_profile.store(prev_profile);
+            if (profiles.count(selected_profile - 1)) {
+                current_profile--;
+                profile_debounce = millis() + 200;
+            }
+        } else if (input_buffer & (1 << 31)) {
+            if (profiles.count(selected_profile + 1)) {
+                current_profile++;
+                profile_debounce = millis() + 200;
             }
         }
-
-        if (input_buffer & (1 << 31)) {
-            const uint8_t next_profile = current_profile.load() + 1;
-            if (profiles.count(next_profile)) {
-                current_profile.store(next_profile);
-            }
-        }
-
-        if (input_buffer & (3 << 30)) profile_debounce = millis() + 200;
     }
 
     // Store and process input data
