@@ -71,6 +71,7 @@ The default display type is the `SSD1306` and resolution is `128x64`, but if you
     "resolution": "128x32",
     "type": "SSD1306"
 }
+```
 
 ## Display Address
 
