@@ -136,7 +136,7 @@ void loop(){
 
 void setup1() {
     do { delay(10); } while (!display_config.config_loaded.load());
-    initDisplay(display_config.type);
+    initDisplay(display_config);
 }
 
 uint32_t display_data = 0xFFFFFFFF;
@@ -146,5 +146,5 @@ void loop1() {
     // display_data = input_data.load();
 
     Profile &cprofile = profiles[current_profile.load()];
-    drawScreen(input_data.load(), output_data.load(), cprofile.profile_name, current_profile.load(), cprofile.layout);
+    drawScreen(input_data.load(), output_data.load(), cprofile, current_profile.load());
 }

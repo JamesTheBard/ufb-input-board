@@ -66,6 +66,11 @@ bool loadProfilesFromSDCard(std::map<uint8_t, Profile> &profiles, DisplayConfig 
         if (dconfig["type"].is<String>()) {
             display_config.type = dconfig["type"].as<String>();
         }
+
+        if (dconfig["resolution"].is<String>()) {
+            display_config.resolution = dconfig["resolution"].as<String>();
+            display_config.resolution.toLowerCase();
+        }
     }
   
     uint8_t pcount = 2;

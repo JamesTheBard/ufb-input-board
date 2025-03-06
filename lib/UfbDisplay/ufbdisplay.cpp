@@ -10,12 +10,16 @@ DisplayConfig display_config;
  * @param display the type of display used
  * 
  */
-void initDisplay(String display_type) {
-    if (display_type == "SH1106") {
-        display = U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
-    }
-    else {
-        display = U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+void initDisplay(DisplayConfig &config) {
+    if (config.resolution == "128x32") {
+        display = U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+    } else {
+        if (config.type == "SH1106") {
+            display = U8G2_SH1106_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+        }
+        else {
+            display = U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, I2C0_SCL, I2C0_SDA);
+        }    
     }
     display.begin();
     display.setContrast(100);
@@ -244,7 +248,7 @@ void drawInputs(uint8_t line, uint32_t data) {
  * @param profile_num the number of the profile in use
  * @param display_type the display layout to use
  */
-void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, DisplayOptions display_type) {
+void drawScreen128X64(uint32_t input_data, uint32_t output_data, Profile &profile, uint8_t profile_num) {
     display.clearBuffer();
 
     // Draw upper-half (inputs)
@@ -272,8 +276,8 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
     display.setDrawColor(1);
     display.setCursor(12, 37);
     display.setFont(u8g2_font_spleen5x8_mr);
-    display.println(profile_name);
-    drawOutputs(40, output_data, display_type);
+    display.println(profile.profile_name);
+    drawOutputs(40, output_data, (DisplayOptions)profile.layout);
 
     display.sendBuffer();
 }
@@ -287,6 +291,32 @@ void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, 
  * @param profile_num the number of the profile in use
  * @param display_type the display layout to use
  */
-void drawScreen(uint32_t input_data, uint32_t output_data, String profile_name, uint8_t profile_num, uint8_t display_type) {
-    drawScreen(input_data, output_data, profile_name, profile_num, static_cast<DisplayOptions>(display_type));
+void drawScreen128X32(uint32_t input_data, uint32_t output_data, Profile &profile, uint8_t profile_num) {
+    display.clearBuffer();
+
+    // Draw lower-half (outputs)
+    display.drawRBox(0, 0, 8, 8, 1);
+    display.setFontMode(1);
+    display.setFont(u8g2_font_squeezed_b6_tn);
+    display.setDrawColor(0);
+    display.setCursor(2, 7);
+    display.print(profile_num);
+    display.setDrawColor(1);
+    display.setCursor(12, 7);
+    display.setFont(u8g2_font_spleen5x8_mr);
+    display.println(profile.profile_name);
+    drawOutputs(10, output_data, (DisplayOptions)profile.layout);
+
+    display.sendBuffer();
+}
+
+/**
+ * 
+ */
+void drawScreen(uint32_t input_data, uint32_t output_data, Profile &profile, uint8_t profile_num) {
+    if (display_config.resolution == "128x32") {
+        drawScreen128X32(input_data, output_data, profile, profile_num);
+    } else {
+        drawScreen128X64(input_data, output_data, profile, profile_num);
+    }
 }

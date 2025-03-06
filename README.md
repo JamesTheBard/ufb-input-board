@@ -25,6 +25,7 @@ To configure profiles, default layout, and the display address, create the `prof
         "address": "0x3C",
         "default_layout": 0,
         "type": "SSD1306",
+        "resolution": "128x64"
     },
     "profiles": [
         {
@@ -51,19 +52,25 @@ To configure profiles, default layout, and the display address, create the `prof
 
 ## Display Type
 
-The firmware supports a few different I2C displays, common sizes of available displays are 0.96", 1.3", and 2.42".  If using a display, the resolution should be 128 pixels by 64 pixels.  Currently supported ICs:
+The firmware supports a few different I2C displays and resolutions.  For 128x64 pixel OLED displays, common sizes of available displays are 0.96", 1.3", and 2.42".  For 128x32 pixel OLED displays, the only currently supported IC is the `SSD1306`.  Currently supported ICs for 128x64 pixel OLED displays are:
 
 - `SSD1306` (2.42", 0.98" OLED displays)
 - `SH1106` (1.3" OLED displays)
 - `CH1116` (1.53" OLED displays)
 
-The default display type is the `SSD1306`, but if you happen to have an SH1106 display, you can set that in the config file.
+The default display type is the `SSD1306` and resolution is `128x64`, but if you happen to have an SH1106 display, you can set that in the config file.
 
 ```json
 "display": {
     "type": "SH1106"
 }
 ```
+
+```json
+"display": {
+    "resolution": "128x32",
+    "type": "SSD1306"
+}
 
 ## Display Address
 
