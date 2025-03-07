@@ -174,26 +174,26 @@ When input 30 (`PE`) is pressed, the display will show **Unlocked** at the top-r
 
 ## Inputs and Outputs
 
-| Input/Output | PS | XBox | Switch | Fightin' |
-|:--:|:--:|:--:|:--:|:--:|
-| `1` | L2 | LT | ZL | 4K |
-| `2` | R2 | RT | ZR | 3K |
-| `3` | Circle | B | A | 2K |
-| `4` | Cross | A | B | 1K |
-| `5` | L1 | LB | L | 4P |
-| `6` | R1 | RB | R | 3P |
-| `7` | Triangle | Y | X | 2P |
-| `8` | Square | X | Y | 1P |
-| `9` | Start | Start | + | Start |
-| `10` | Home | Home | Home | Home |
-| `11` | Select | Select | - | Select |
-| `12` | Left | Left | Left | Left |
-| `13` | Right | Right | Right | Right |
-| `14` | Down | Down | Down | Down |
-| `15` | Up | Up | Up | Up |
-| `16` | L3 | LTSB | LTSB | L3 |
-| `17` | R3 | RTSB | RTSB | R3 |
-| `18` | TP Key | -- | -- | -- |
+| Input/Output | PS | XBox | Wii U | Switch | Fightin' |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| `1` | L2 | LT | ZL | ZL | 4K |
+| `2` | R2 | RT | ZR | ZR | 3K |
+| `3` | Circle | B | A | A | 2K |
+| `4` | Cross | A | B | B | 1K |
+| `5` | L1 | LB | L | L | 4P |
+| `6` | R1 | RB | R | R | 3P |
+| `7` | Triangle | Y | X | X | 2P |
+| `8` | Square | X | Y | Y | 1P |
+| `9` | Start | Start | Start | `+` | Start |
+| `10` | Home | Home  | -- | Home | Home |
+| `11` | Select | Select | Select | `-` | Select |
+| `12` | Left | Left | Left | Left | Left |
+| `13` | Right | Right | Right | Right | Right |
+| `14` | Down | Down | Down | Down | Down |
+| `15` | Up | Up | Up | Up | Up |
+| `16` | L3 | LTSB | -- |LTSB | L3 |
+| `17` | R3 | RTSB | -- |RTSB | R3 |
+| `18` | TP Key | -- | -- | -- | Capture |
 
 For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`).  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.  Inputs 30, 31, and 32 are reserved for profile selection and cannot be remapped.
 
