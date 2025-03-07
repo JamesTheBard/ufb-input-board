@@ -1,7 +1,7 @@
 # UFB Input Board
 
-![](images/input_board_and_display.jpeg)
-![](images/adapter_board.jpeg)
+![](images/adapter_1.4.JPG)
+![](images/input_1.0.JPG)
 
 ## What the Hell is This Project?
 
@@ -197,6 +197,30 @@ When input 30 (`PE`) is pressed, the display will show **Unlocked** at the top-r
 
 For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`).  These can be mapped to any output.  More information about this can be found in the _Mapping_ section.  Inputs 30, 31, and 32 are reserved for profile selection and cannot be remapped.
 
+### Compatibility
+
+While this should be compatible with everything the Brook UFB is compatible with, there are two operational modes: single cable (a USB-C cable connected to the adapter board) and dual cable mode (a USB-C cable connected to the adapter board and another USB cable connected to the input board).
+
+#### Single Cable
+
+1. Ensure the `VUSB` jumper on the adapter board is **enabled**.
+2. Connect the USB-C cable from the input board into your device.
+3. Enjoy!
+
+#### Dual Cable
+
+1. Ensure the `VUSB` jumper on the adapter board is **disabled**.
+2. Connect the USB-C cable from the input board into your device.
+3. Connect the USB cable from the adapter board into the device.  If that's not possible then use a USB hub because your setup has angered the gods.[^4]
+4. Enjoy!
+
+#### Platforms/Devices
+
+| Platform | Cable Mode | Notes |
+|:-:|:-:|:--|
+| Computer | Single* | Most of the computers I've tested this with work with a single cable, however some laptops seem to really not like it and just keep rebooting the whole setup. |
+
+
 ### Footnotes
 
 [^1]: This board is full of "old-school" components.  The shift registers on the input board (`SN74HC165`) started manufacture in 1982 as well as the ones on the adapter board (`SN74HC595`).
@@ -204,3 +228,5 @@ For inputs, there are 11 undefined inputs: `19` through `29` (`A1` through `A11`
 [^2]: You _have_ to use the Type-C connector.  This feeds the +5V to all of the boards and more importantly doesn't go directly to the Brook UFB...which means we can delay the Brook UFB's boot sequence until after everything is ready to go on the input and adapter boards.
 
 [^3]: The first eight inputs are also known as `4K`, `3K`, `2K`, `1K`, `4P`, `3P`, `2P`, and `1P`.
+
+[^4]: In this specific case, it's not you, it's definitely me.
