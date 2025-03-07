@@ -229,4 +229,4 @@ While this should be compatible with everything the Brook UFB is compatible with
 
 [^3]: The first eight inputs are also known as `4K`, `3K`, `2K`, `1K`, `4P`, `3P`, `2P`, and `1P`.
 
-[^4]: In this specific case, it's not you, it's definitely me.
+[^4]: In this specific case, it's not you, it's definitely me.  More specifically there is an issue where some USB ports absolutely choke with the way things are configured.  Using one cable for the data (USB-C) and the other for power (USB to the Pico/Pico 2) fixes that issue.
